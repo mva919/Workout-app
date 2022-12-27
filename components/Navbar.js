@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Navbar({ }) {
   return (
-    <nav className=" bg-blue-300">
-      <ul className="flex flex-row justify-center gap-4 bg-slate-200 py-4 
+    <nav className="mb-6 bg-slate-200 drop-shadow">
+      <ul className="container mx-auto flex flex-row justify-center gap-4 py-4 
       text-lg font-bold">
         <Link href="/">
           <li className="hover:text-indigo-500">

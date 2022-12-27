@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Barbell Bench Press",
+    "muscle": "Chest",
+    "equipment": "Barbell"
+  },
+  {
+    "id": 2,
+    "name": "Dumbbell Bench Press",
+    "muscle": "Chest",
+    "equipment": "Dumbbell"
+  },
+  {
+    "id": 3,
+    "name": "Barbell Squats",
+    "muscle": "Legs",
+    "equipment": "Barbell"
+  },
+  {
+    "id": 4,
+    "name": "Deadlift",
+    "muscle": "Back",
+    "equipment": "Barbell"
+  }
+]
