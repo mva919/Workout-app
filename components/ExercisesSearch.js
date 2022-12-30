@@ -6,7 +6,7 @@ import { ExercisesContext } from "../lib/ExercisesContext";
 import { BODY_PARTS, EXERCISE_CATEGORIES } from "../lib/constants";
 
 
-export default function ExercisesSearch({ }) {
+export default function ExercisesSearch({ handleExerciseClick }) {
   const { exercises } = useContext(ExercisesContext);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
@@ -70,7 +70,11 @@ export default function ExercisesSearch({ }) {
         {/* ready state, displaying json data */}
         {workoutList.map((workout) => {
           return (
-            <li key={workout.id} className="">
+            <li
+              key={workout.id}
+              className="cursor-pointer"
+              onClick={(e) => handleExerciseClick(workout)}
+            >
               <p className="font-semibold">{workout.name}</p>
               <p>{workout.muscle}</p>
             </li>

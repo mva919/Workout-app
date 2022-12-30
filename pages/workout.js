@@ -2,10 +2,11 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import ExercisesSearch from "../components/ExercisesSearch";
+import ExerciseTracker from "../components/ExerciseTracker";
 import { ExercisesContext } from "../lib/ExercisesContext";
 
 export default function WorkoutPage({ }) {
-  const { exercises } = useContext(ExercisesContext);
+  // const { exercises } = useContext(ExercisesContext);
   const [templates, setTemplates] = useState([]);
   const [workoutStarted, setWorkoutStarted] = useState(false);
   const [showExercises, setShowExercises] = useState(false);
@@ -30,7 +31,13 @@ export default function WorkoutPage({ }) {
   };
 
   const handleRemoveExerciseClick = (exercise) => {
-
+    const exerciseArray = [...addedExercises];
+    const deleteIndex = exerciseArray.indexOf(exercise);
+    console.log(deleteIndex);
+    if (deleteIndex !== -1) {
+      exerciseArray.splice(deleteIndex, 1);
+      setAddedExercises(exerciseArray);
+    }
   };
 
   return (
@@ -67,13 +74,17 @@ export default function WorkoutPage({ }) {
           <h1>New Workout</h1>
 
           {addedExercises.length !== 0 ?
-            addedExercises.map((exercise) => {
+            addedExercises.map((currExercise) => {
               return (
                 <div>
-                  {exercise}
-                  <button className="text-red-500">
+                  {/* {exercise.name}
+                  <button
+                    className="text-red-500"
+                    onClick={(e) => handleRemoveExerciseClick(exercise)}
+                  >
                     <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  </button> */}
+                  <ExerciseTracker exercise={currExercise} />
                 </div>
               );
             })
@@ -90,19 +101,7 @@ export default function WorkoutPage({ }) {
             </button>
             :
             <div>
-              <ExercisesSearch />
-              {/* {exercises.map((exercise) => {
-                return (
-                  <li
-                    key={exercise.id}
-                    className="cursor-pointer list-none hover:bg-slate-200 hover:rounded px-2"
-                    onClick={(e) => handleAddExerciseClick(exercise.name)}
-                  >
-                    <p className="font-semibold">{exercise.name}</p>
-                    <p>{exercise.muscle}</p>
-                  </li>
-                );
-              })} */}
+              <ExercisesSearch handleExerciseClick={handleAddExerciseClick} />
             </div>
           }
 
