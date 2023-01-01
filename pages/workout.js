@@ -1,9 +1,8 @@
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import ExercisesSearch from "../components/ExercisesSearch";
 import ExerciseTracker from "../components/ExerciseTracker";
 import { ExercisesContext } from "../lib/ExercisesContext";
+import { v4 as uuid } from 'uuid';
 
 export default function WorkoutPage({ }) {
   // const { exercises } = useContext(ExercisesContext);
@@ -22,12 +21,12 @@ export default function WorkoutPage({ }) {
 
   const handleAddExercise = () => {
     setShowExercises(true);
-
   };
 
   const handleAddExerciseClick = (exercise) => {
     setShowExercises(false);
-    setAddedExercises(addedExercises.concat(exercise));
+    setAddedExercises(addedExercises.concat({ ...exercise, uid: uuid() }));
+    console.log(addedExercises);
   };
 
   const handleRemoveExerciseClick = (exercise) => {
@@ -71,20 +70,18 @@ export default function WorkoutPage({ }) {
         </>
         :
         <>
-          <h1>New Workout</h1>
+          <h1 className="text-4xl font-bold my-2">New Workout</h1>
 
           {addedExercises.length !== 0 ?
             addedExercises.map((currExercise) => {
               return (
-                <div>
-                  {/* {exercise.name}
-                  <button
-                    className="text-red-500"
-                    onClick={(e) => handleRemoveExerciseClick(exercise)}
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button> */}
-                  <ExerciseTracker exercise={currExercise} />
+                <div key={currExercise.uid}>
+                  <ExerciseTracker
+                    exercise={currExercise}
+                    handleRemoveClick={
+                      () => handleRemoveExerciseClick(currExercise)
+                    }
+                  />
                 </div>
               );
             })
@@ -110,7 +107,7 @@ export default function WorkoutPage({ }) {
             onClick={handleEndWorkout}
             className="bg-red-400 rounded px-4 py-1 my-1 font-semibold"
           >
-            End Workout
+            Cancel Workout
           </button>
         </>
 
