@@ -22,5 +22,35 @@
     "name": "Deadlift",
     "muscle": "Back",
     "equipment": "Barbell"
+  },
+  {
+    "id": 5,
+    "name": "Leg Extensions",
+    "muscle": "Legs",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 6,
+    "name": "Leg Press",
+    "muscle": "Legs",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 7,
+    "name": "Hack Squat",
+    "muscle": "Legs",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 8,
+    "name": "Seated Leg Curl",
+    "muscle": "Legs",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 9,
+    "name": "Seated Calf Raise",
+    "muscle": "Legs",
+    "equipment": "Machine/Other"
   }
 ]

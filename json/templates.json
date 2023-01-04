@@ -1,0 +1,58 @@
+[
+  {
+    "templateName": "Example Workout",
+    "workouts": [
+      {
+        "workoutId": 1,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "10"
+          },
+          {
+            "weight": "",
+            "reps": "10"
+          },
+          {
+            "weight": "",
+            "reps": "10"
+          }
+        ]
+      },
+      {
+        "workoutId": 2,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "10"
+          },
+          {
+            "weight": "",
+            "reps": "10"
+          },
+          {
+            "weight": "",
+            "reps": "10"
+          }
+        ]
+      },
+      {
+        "workoutId": 3,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "10"
+          },
+          {
+            "weight": "",
+            "reps": "10"
+          },
+          {
+            "weight": "",
+            "reps": "10"
+          }
+        ]
+      }
+    ]
+  }
+]

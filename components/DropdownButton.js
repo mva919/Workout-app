@@ -9,7 +9,7 @@ export default function DropdownButton({ dropdownOptions, buttonName, selectedCa
     setToggle(!toggle);
     if (option === buttonText) {
       setButtonText(buttonName);
-      selectedCategory(buttonName);
+      selectedCategory("");
       return;
     }
     setButtonText(option);
@@ -20,13 +20,14 @@ export default function DropdownButton({ dropdownOptions, buttonName, selectedCa
     <div className="inline-flex flex-col items-start content-center my-2">
       <button
         onClick={handleToggle}
-        className="bg-slate-200 px-2 py-2 rounded focus:outline focus:outline-blue-500 w-64"
+        className="bg-slate-50 px-2 py-2 rounded focus:outline 
+        focus:outline-blue-500 w-64"
       >
         {buttonText}
       </button>
       {toggle &&
         <div
-          className="bg-slate-200 rounded list-none my-1 px-2 py-1 w-64"
+          className="bg-slate-50 rounded list-none my-1 px-2 py-1 w-64"
         >
           {dropdownOptions.map((option, index) => {
             return (
