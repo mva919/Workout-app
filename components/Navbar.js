@@ -17,7 +17,7 @@ export default function Navbar({ }) {
           </li>
         </Link>
 
-        <Link href="/workout">
+        <Link href="/template">
           <li className="hover:text-indigo-500">
             Start Workout
           </li>

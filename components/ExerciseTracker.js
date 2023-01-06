@@ -126,7 +126,8 @@ export default function ExerciseTracker({ exercise, handleRemoveClick }) {
                 <button>
                   <FontAwesomeIcon
                     icon={faXmark}
-                    className="bg-red-500 w-2 py-1 px-2 rounded font-bold text-white hover:bg-red-700 ease-in duration-100"
+                    className="bg-red-500 w-2 py-1 px-2 rounded font-bold
+                     text-white hover:bg-red-700 ease-in duration-100"
                     onClick={(e) => handleRemoveSet(index)}
                   />
                 </button>

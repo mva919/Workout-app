@@ -1,27 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import ExercisesSearch from "../components/ExercisesSearch";
 import ExerciseTracker from "../components/ExerciseTracker";
-import { ExercisesContext } from "../lib/ExercisesContext";
 import { v4 as uuid } from 'uuid';
-import toast, { Toaster } from "react-hot-toast";
-import { useDefaultTemplates, useExercisesData } from "../lib/hooks";
+import { toast } from "react-hot-toast";
+import Link from "next/link";
+import { TemplateContext } from "../lib/TemplateContext";
+import { useRouter } from "next/router";
 
 export default function WorkoutPage({ }) {
-  const defaultTemplates = useDefaultTemplates();
-  const [templates, setTemplates] = useState([]);
-  const [workoutStarted, setWorkoutStarted] = useState(false);
+  const { template, setTemplate } = useContext(TemplateContext);
   const [showExercises, setShowExercises] = useState(false);
   const [addedExercises, setAddedExercises] = useState([]);
-  const [workoutTitle, setWorkoutTitle] = useState("");
-  const exercises = useContext(ExercisesContext);
-
-  const handleStartWorkout = () => {
-    setWorkoutStarted(true);
-  };
+  const [workoutTitle, setWorkoutTitle] = useState(template ?
+    template.templateName : "");
+  const router = useRouter();
 
   const handleCancelWorkout = () => {
     toast.error('Workout Canceled.');
-    setWorkoutStarted(false);
+    setTemplate({});
+    router.push("/template");
   };
 
   const handleAddExercise = () => {
@@ -55,125 +52,72 @@ export default function WorkoutPage({ }) {
 
   return (
     <main className="container mx-auto">
-      {!workoutStarted ?
-        <>
-          <h1 className="text-4xl font-bold mb-6">Start Workout</h1>
-
-          <div className="flex flex-col gap-1 mb-4">
-            <h2 className="font-bold text-xl">Quick Start</h2>
-            <button
-              className="bg-indigo-500 text-white py-2 rounded-md mx-1
-              font-semibold hover:bg-indigo-700 ease-in duration-100"
-              onClick={handleStartWorkout}
-            >
-              Start an Empty Workout
-            </button>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-bold">Templates</h2>
-            <div className="flex flex-row justify-between">
-              <h3 className="font-bold">
-                My templates ({templates.length})
-              </h3>
-              <button className="bg-slate-200 rounded-md px-4 py-1 
-              hover:bg-indigo-500 hover:text-white ease-in duration-200">
-                + Template
-              </button>
-            </div>
-
-            <h3 className="font-bold">
-              Example templates ({defaultTemplates.length})
-            </h3>
-
-            <div className="my-4">
-              {defaultTemplates.map((template, index) => {
-                return (
-                  <TemplatePreview
-                    key={index}
-                    title={template.templateName}
-                    workouts={template.workouts}
-                    exercisesData={exercises}
-                  />
-                );
-              })}
-            </div>
-
-
-          </div>
-        </>
-        :
-        <>
-          <div className="flex flex-row justify-between items-center">
-            <h1 className="text-4xl font-bold my-2">
-              <input
-                type="text"
-                placeholder="New Workout"
-                onChange={handleTitleChange}
-                value={workoutTitle}
-                className="rounded hover:outline-indigo-500 hover:outline
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="text-4xl font-bold my-2">
+          <input
+            type="text"
+            placeholder="New Workout"
+            onChange={handleTitleChange}
+            value={workoutTitle}
+            className="rounded hover:outline-indigo-500 hover:outline
                 ease-in duration-100"
-              />
-            </h1>
-            <button
-              className="bg-green-400 rounded px-4 py-2 font-semibold
+          />
+        </h1>
+        <button
+          className="bg-green-400 rounded px-4 py-2 font-semibold
               shadow hover:bg-green-700 hover:text-white ease-in 
               duration-200"
-              onClick={handleWorkoutFinish}
-            >
-              Finish Workout
-            </button>
-          </div>
-          <Timer />
+          onClick={handleWorkoutFinish}
+        >
+          Finish Workout
+        </button>
+      </div>
+      <Timer />
 
-          {addedExercises.length !== 0 ?
-            addedExercises.map((currExercise) => {
-              return (
-                <div key={currExercise.uid} className="bg-slate-200 shadow rounded px-4 py-1 my-2">
-                  <ExerciseTracker
-                    exercise={currExercise}
-                    handleRemoveClick={
-                      () => handleRemoveExerciseClick(currExercise)
-                    }
-                  />
-                </div>
-              );
-            })
-            :
-            <div></div>
-          }
-
-          {!showExercises ?
-            <button
-              onClick={handleAddExercise}
-              className="bg-indigo-500 rounded py-2 font-semibold w-1/2 block
-              mx-auto text-white my-1 shadow hover:bg-indigo-700 ease-in
-              duration-100"
+      {addedExercises.length !== 0 ?
+        addedExercises.map((currExercise) => {
+          return (
+            <div
+              key={currExercise.uid}
+              className="bg-slate-200 shadow rounded px-4 py-1 my-2"
             >
-              Add Workout
-            </button>
-            :
-            <div>
-              <ExercisesSearch handleExerciseClick={handleAddExerciseClick} />
+              <ExerciseTracker
+                exercise={currExercise}
+                handleRemoveClick={
+                  () => handleRemoveExerciseClick(currExercise)
+                }
+              />
             </div>
-          }
-
-          <button
-            onClick={handleCancelWorkout}
-            className="bg-red-400 rounded py-2 my-6 font-semibold block
-            mx-auto w-1/2 text-white shadow hover:bg-red-700 ease-in
-            duration-100"
-          >
-            Cancel Workout
-          </button>
-        </>
-
+          );
+        })
+        :
+        <div></div>
       }
-      <Toaster
-        position="bottom-right"
-        reverseOrder={false}
-      />
-    </main>
+
+      {!showExercises ?
+        <button
+          onClick={handleAddExercise}
+          className="bg-indigo-500 rounded py-2 font-semibold w-1/2 block
+              mx-auto text-white mt-8 shadow hover:bg-indigo-700 ease-in
+              duration-100"
+        >
+          Add Workout
+        </button>
+        :
+        <div className="bg-slate-200">
+          <ExercisesSearch handleExerciseClick={handleAddExerciseClick} />
+        </div>
+      }
+
+      <button
+        className="bg-red-400 rounded py-2 my-6 font-semibold block
+            mx-auto w-1/2 text-white shadow hover:bg-red-700 ease-in
+            duration-100 text-center"
+        onClick={handleCancelWorkout}
+      >
+        Cancel Workout
+      </button>
+    </main >
   );
 }
 
@@ -207,27 +151,6 @@ function Timer() {
           ("0" + Math.floor(elapsedTime % 60)) :
           Math.floor(elapsedTime % 60)}
       </p>
-    </div>
-  );
-}
-
-function TemplatePreview({ title, workouts, exercisesData }) {
-
-  return (
-    <div className="bg-slate-200 shadow w-1/4 p-2 rounded">
-      <h1 className="font-semibold">{title}</h1>
-      {workouts.map((workout, index) => {
-        return (
-          <div key={index}>
-            <h2>
-              {`${workout.sets.length} x 
-              ${exercisesData.find((exercise) =>
-                exercise.id === workout.workoutId).name}
-              `}
-            </h2>
-          </div>
-        );
-      })}
     </div>
   );
 }
