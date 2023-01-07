@@ -18,6 +18,7 @@ export default function TemplatePage({ }) {
       template.templateId === templateId);
 
     setTemplate(defaultTemplate);
+    console.log(template.workouts);
     router.push("/workout");
   };
 

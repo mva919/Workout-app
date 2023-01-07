@@ -3,8 +3,7 @@ import DropdownButton from "../components/DropdownButton";
 import { ExercisesContext } from "../lib/ExercisesContext";
 import { BODY_PARTS, EXERCISE_CATEGORIES } from "../lib/constants";
 
-
-export default function ExercisesSearch({ handleExerciseClick }) {
+export default function ExercisesSearch({ handleExerciseClick, isPage }) {
   const exercises = useContext(ExercisesContext);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
@@ -12,13 +11,11 @@ export default function ExercisesSearch({ handleExerciseClick }) {
   const [workoutList, setWorkoutList] = useState(exercises);
   const [workoutData, setWorkoutData] = useState(exercises);
 
-
   useEffect(() => {
     const filteredWorkouts = searchWorkoutList(
       searchWorkout, bodyPart, category);
     setWorkoutList(filteredWorkouts);
   }, [bodyPart, category]);
-
 
   const handleChange = (e) => {
     setSearchWorkout(e.target.value);
@@ -54,10 +51,11 @@ export default function ExercisesSearch({ handleExerciseClick }) {
 
 
   return (
-    <div className="text-center rounded shadow py-4 my-2">
+    <div className="text-center rounded py-4 my-2">
       <form onSubmit={handleSubmit}>
         <input
-          className="bg-slate-50 my-4 rounded px-2 py-2 w-1/2"
+          className={`my-4 rounded px-2 py-2 w-1/2 
+          ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
           type="text"
           placeholder="Search"
           id="search"
@@ -71,33 +69,39 @@ export default function ExercisesSearch({ handleExerciseClick }) {
           dropdownOptions={EXERCISE_CATEGORIES}
           buttonName="Any Category"
           selectedCategory={btnCategory => setCategory(btnCategory)}
+          isDark={isPage}
         />
         <DropdownButton
           dropdownOptions={BODY_PARTS}
           buttonName="Any Body Part"
           selectedCategory={btnBodyPart => setBodyPart(btnBodyPart)}
+          isDark={isPage}
         />
       </div>
 
-      <ul className="flex flex-col items-start mx-auto bg-slate-50 w-1/2
-        shadow-sm rounded"
+      <ul
+        className={`flex flex-col items-start mx-auto w-1/2 shadow-sm rounded
+        ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
       >
         {/* ready state, displaying json data */}
-        {workoutList.map((workout) => {
+        {workoutList.length !== 0 ? workoutList.map((workout) => {
           return (
             <li
               key={workout.id}
-              className="cursor-pointer flex flex-col items-start
-              justify-center px-4 py-1 border-b border-slate-200 w-full 
-              hover:bg-slate-100 hover:rounded"
+              className={`cursor-pointer flex flex-col items-start
+              justify-center px-4 py-1 border-b w-full 
+              hover:rounded hover:bg-slate-300
+              ${isPage ? "border-slate-300" : "border-slate-200"}`}
               onClick={(e) => handleExerciseClick(workout)}
             >
               <p className="font-semibold">{workout.name}</p>
               <p>{workout.muscle}</p>
             </li>
           );
-        })}
+        }) :
+          <h3 className="mx-auto py-2 font-semibold text-slate-500">No results</h3>
+        }
       </ul>
-    </div>
+    </div >
   );
 }

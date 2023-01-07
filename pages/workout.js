@@ -9,10 +9,14 @@ import { useRouter } from "next/router";
 
 export default function WorkoutPage({ }) {
   const { template, setTemplate } = useContext(TemplateContext);
+  const addedExercisesInitialState = Object.keys(template).length !== 0 ?
+    template.workouts : [];
+  const workoutTitleInitialState = Object.keys(template).length !== 0 ?
+    template.templateName : "";
   const [showExercises, setShowExercises] = useState(false);
-  const [addedExercises, setAddedExercises] = useState([]);
-  const [workoutTitle, setWorkoutTitle] = useState(template ?
-    template.templateName : "");
+  const [addedExercises, setAddedExercises] = useState(
+    addedExercisesInitialState);
+  const [workoutTitle, setWorkoutTitle] = useState(workoutTitleInitialState);
   const router = useRouter();
 
   const handleCancelWorkout = () => {
@@ -25,9 +29,11 @@ export default function WorkoutPage({ }) {
     setShowExercises(true);
   };
 
-  const handleAddExerciseClick = (exercise) => {
+  const handleAddExerciseClick = (workout) => {
+    console.log(workout);
+    // console.log(addedExercises);
     setShowExercises(false);
-    setAddedExercises(addedExercises.concat({ ...exercise, uid: uuid() }));
+    setAddedExercises(addedExercises.concat({ ...workout, workoutId: uuid() }));
     console.log(addedExercises);
   };
 
@@ -78,14 +84,15 @@ export default function WorkoutPage({ }) {
         addedExercises.map((currExercise) => {
           return (
             <div
-              key={currExercise.uid}
+              key={currExercise.workoutId}
               className="bg-slate-200 shadow rounded px-4 py-1 my-2"
             >
               <ExerciseTracker
-                exercise={currExercise}
+                exerciseId={currExercise.id}
                 handleRemoveClick={
                   () => handleRemoveExerciseClick(currExercise)
                 }
+                exerciseSets={currExercise.sets}
               />
             </div>
           );
@@ -104,8 +111,11 @@ export default function WorkoutPage({ }) {
           Add Workout
         </button>
         :
-        <div className="bg-slate-200">
-          <ExercisesSearch handleExerciseClick={handleAddExerciseClick} />
+        <div className="bg-slate-200 rounded">
+          <ExercisesSearch
+            handleExerciseClick={handleAddExerciseClick}
+            isPage={false}
+          />
         </div>
       }
 

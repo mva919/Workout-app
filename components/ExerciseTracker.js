@@ -1,17 +1,27 @@
 import { faCheck, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { v4 as uuid } from "uuid";
+import { ExercisesContext } from "../lib/ExercisesContext";
 
-export default function ExerciseTracker({ exercise, handleRemoveClick }) {
-  const [sets, setSets] = useState([{
-    weight: "", reps: "", completed: false, id: uuid(), setType: "normal"
-  }]);
+export default function ExerciseTracker({ exerciseId, handleRemoveClick,
+  exerciseSets }) {
+  const exercises = useContext(ExercisesContext);
+  const exercise = exercises.find((exercise) => exercise.id === exerciseId);
+  const setsInitialState = exerciseSets !== undefined ?
+    exerciseSets.map((exercise) => {
+      return {
+        ...exercise, completed: false, setId: uuid(), setType: "normal"
+      };
+    }) : [{
+      weight: "", reps: "", completed: false, setId: uuid(), setType: "normal"
+    }];
+  const [sets, setSets] = useState(setsInitialState);
 
   const handleClick = () => {
     setSets(sets.concat({
-      weight: "", reps: "", completed: false, id: uuid(), setType: "normal"
+      weight: "", reps: "", completed: false, setId: uuid(), setType: "normal"
     }));
   };
 
@@ -41,6 +51,7 @@ export default function ExerciseTracker({ exercise, handleRemoveClick }) {
       setsArray[index] = set;
       setSets(setsArray);
     }
+    console.log(sets);
   };
 
   const handleSetClick = (index, setType) => {
@@ -84,16 +95,20 @@ export default function ExerciseTracker({ exercise, handleRemoveClick }) {
 
         {sets.map((set, index) => {
           return (
-            <div key={set.id} className={
-              set.completed ?
-                "bg-slate-50 px-2 py-1 items-center rounded flex flex-row justify-between my-1" :
-                "px-2 py-1 items-center rounded flex flex-row justify-between my-1"
-            }>
+            <div
+              key={set.setId}
+              className={
+                set.completed ?
+                  "bg-slate-50 px-2 py-1 items-center rounded flex flex-row justify-between my-1" :
+                  "px-2 py-1 items-center rounded flex flex-row justify-between my-1"
+              }
+            >
               <SetButton
                 text={(index + 1).toString()}
                 updateSetType={handleSetClick}
                 setIndex={index}
               />
+
               <input
                 type="text"
                 value={set.weight}
@@ -116,7 +131,7 @@ export default function ExerciseTracker({ exercise, handleRemoveClick }) {
                     icon={faCheck}
                     className={
                       set.completed ?
-                        "bg-green-300 p-1 rounded " :
+                        "bg-green-300 p-1 rounded" :
                         "bg-slate-50 p-1 rounded hover:bg-green-300 ease-in duration-100"
                     }
                     onClick={(e) => handleCompletedChange(index)}
@@ -127,7 +142,7 @@ export default function ExerciseTracker({ exercise, handleRemoveClick }) {
                   <FontAwesomeIcon
                     icon={faXmark}
                     className="bg-red-500 w-2 py-1 px-2 rounded font-bold
-                     text-white hover:bg-red-700 ease-in duration-100"
+                  text-white hover:bg-red-700 ease-in duration-100"
                     onClick={(e) => handleRemoveSet(index)}
                   />
                 </button>

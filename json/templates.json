@@ -4,6 +4,7 @@
     "templateName": "Example Workout",
     "workouts": [
       {
+        "id": 1,
         "workoutId": 1,
         "sets": [
           {
@@ -21,6 +22,7 @@
         ]
       },
       {
+        "id": 2,
         "workoutId": 2,
         "sets": [
           {
@@ -38,6 +40,7 @@
         ]
       },
       {
+        "id": 3,
         "workoutId": 3,
         "sets": [
           {
