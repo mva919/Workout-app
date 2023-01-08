@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { useContext } from "react";
+import { UserContext } from "../lib/UserContext";
 
 export default function Navbar({ }) {
+  const { user } = useContext(UserContext);
+
   return (
     <nav className="mb-6 bg-slate-200 drop-shadow">
       <ul className="container mx-auto flex flex-row justify-center gap-4 py-4 
