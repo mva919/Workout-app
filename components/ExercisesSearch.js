@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import DropdownButton from "../components/DropdownButton";
+import { useState, useEffect, useContext, useRef } from "react";
 import { ExercisesContext } from "../lib/ExercisesContext";
 import { BODY_PARTS, EXERCISE_CATEGORIES } from "../lib/constants";
+import { useOutsideClick } from "../lib/hooks";
 
 export default function ExercisesSearch({ handleExerciseClick, isPage }) {
   const exercises = useContext(ExercisesContext);
@@ -9,7 +9,6 @@ export default function ExercisesSearch({ handleExerciseClick, isPage }) {
   const [bodyPart, setBodyPart] = useState("");
   const [category, setCategory] = useState("");
   const [workoutList, setWorkoutList] = useState(exercises);
-  const [workoutData, setWorkoutData] = useState(exercises);
 
   useEffect(() => {
     const filteredWorkouts = searchWorkoutList(
@@ -38,17 +37,14 @@ export default function ExercisesSearch({ handleExerciseClick, isPage }) {
       return word[0].toUpperCase() + word.substring(1);
     }).join(" ");
 
-    console.log(workoutData);
-    const resultsArray = workoutData.filter(workout => {
+    const resultsArray = exercises.filter(workout => {
       return workout.muscle.includes(bodyFilter) &&
         workout.equipment.includes(categoryFilter)
         && workout.name.includes(convertedStr);
     });
-    console.log(resultsArray);
 
     return resultsArray;
   };
-
 
   return (
     <div className="text-center rounded py-4 my-2">
@@ -99,9 +95,71 @@ export default function ExercisesSearch({ handleExerciseClick, isPage }) {
             </li>
           );
         }) :
-          <h3 className="mx-auto py-2 font-semibold text-slate-500">No results</h3>
+          <h3 className="mx-auto py-2 font-semibold text-slate-500">
+            No results
+          </h3>
         }
       </ul>
     </div >
+  );
+}
+
+function DropdownButton({ dropdownOptions, buttonName,
+  selectedCategory, isDark }) {
+  const [toggle, setToggle] = useState(false);
+  const [buttonText, setButtonText] = useState(buttonName);
+  const ref = useRef();
+
+  useOutsideClick(ref, () => {
+    setToggle(false);
+  });
+
+  const handleToggle = () => setToggle(!toggle);
+  const handleClick = (option) => {
+    setToggle(!toggle);
+    if (option === buttonText) {
+      setButtonText(buttonName);
+      selectedCategory("");
+      return;
+    }
+    setButtonText(option);
+    selectedCategory(option);
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="flex flex-col items-start content-center my-2 relative"
+    >
+      <button
+        onClick={handleToggle}
+        className={`px-2 py-2 rounded focus:outline 
+        focus:outline-blue-700 w-64 ease-in duration-300
+        hover:bg-indigo-500 hover:text-white
+        ${isDark ? "bg-slate-200" : "bg-slate-50"}`}
+      >
+        {buttonText}
+      </button>
+      {toggle &&
+        <div
+          className={`rounded list-none my-1 px-2 py-1 w-64 absolute top-full 
+          drop-shadow-xl ${isDark ? "bg-slate-200" : "bg-slate-50"}`}
+        >
+          {dropdownOptions.map((option, index) => {
+            return (
+              <li
+                key={index}
+                onClick={(e) => handleClick(option)}
+                className={`cursor-pointer my-1 rounded 
+                ${isDark ? "hover:bg-slate-300" : "hover:bg-slate-200"}`}
+              >
+                {option}
+              </li>
+            );
+          })}
+        </div>
+      }
+
+    </div>
   );
 }

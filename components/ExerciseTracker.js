@@ -1,12 +1,13 @@
-import { faCheck, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faLock, faRulerHorizontal, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { v4 as uuid } from "uuid";
 import { ExercisesContext } from "../lib/ExercisesContext";
+import { useOutsideClick } from "../lib/hooks";
 
 export default function ExerciseTracker({ exerciseId, handleRemoveClick,
-  exerciseSets }) {
+  exerciseSets, previewMode, updateSets }) {
   const exercises = useContext(ExercisesContext);
   const exercise = exercises.find((exercise) => exercise.id === exerciseId);
   const setsInitialState = exerciseSets !== undefined ?
@@ -23,6 +24,8 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     setSets(sets.concat({
       weight: "", reps: "", completed: false, setId: uuid(), setType: "normal"
     }));
+    console.log(sets);
+    updateSets(sets);
   };
 
   const handleWeightChange = (e, index) => {
@@ -31,6 +34,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     set.weight = e.target.value;
     setsArray[index] = set;
     setSets(setsArray);
+    updateSets(setsArray);
   };
 
   const handleRepChange = (e, index) => {
@@ -39,6 +43,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     set.reps = e.target.value;
     setsArray[index] = set;
     setSets(setsArray);
+    updateSets(setsArray);
   };
 
   const handleCompletedChange = (index) => {
@@ -50,6 +55,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
       set.completed = !set.completed;
       setsArray[index] = set;
       setSets(setsArray);
+      updateSets(setsArray);
     }
     console.log(sets);
   };
@@ -60,6 +66,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     set.setType = setType;
     setsArray[index] = set;
     setSets(setsArray);
+    updateSets(setsArray);
     console.log(setsArray);
   };
 
@@ -67,6 +74,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     let setsArray = [...sets];
     setsArray.splice(index, 1);
     setSets(setsArray);
+    updateSets(setsArray);
     console.log(setsArray);
   };
 
@@ -87,10 +95,17 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
           <h3 className="font-semibold px-2">Set</h3>
           <h3 className="font-semibold">Weight(lbs)</h3>
           <h3 className="font-semibold">Reps</h3>
-          <FontAwesomeIcon
-            className="px-4"
-            icon={faCheck}
-          />
+          {previewMode ?
+            <FontAwesomeIcon
+              className="px-4 text-slate-500"
+              icon={faLock}
+            />
+            :
+            <FontAwesomeIcon
+              className="px-4"
+              icon={faCheck}
+            />
+          }
         </div>
 
         {sets.map((set, index) => {
@@ -125,18 +140,29 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
                 className="bg-slate-50 rounded text-center"
               />
 
+
               <div className="flex flex-row gap-2">
-                <button>
-                  <FontAwesomeIcon
-                    icon={faCheck}
-                    className={
-                      set.completed ?
-                        "bg-green-300 p-1 rounded" :
-                        "bg-slate-50 p-1 rounded hover:bg-green-300 ease-in duration-100"
-                    }
-                    onClick={(e) => handleCompletedChange(index)}
-                  />
-                </button>
+                {previewMode ?
+                  <button disabled>
+                    <FontAwesomeIcon
+                      className="bg-slate-300 text-slate-500
+                      w-2 py-1 px-2 rounded font-bold"
+                      icon={faLock}
+                    />
+                  </button>
+                  :
+                  <button>
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      className={
+                        set.completed ?
+                          "bg-green-300 p-1 rounded" :
+                          "bg-slate-50 p-1 rounded hover:bg-green-300 ease-in duration-100"
+                      }
+                      onClick={(e) => handleCompletedChange(index)}
+                    />
+                  </button>
+                }
 
                 <button>
                   <FontAwesomeIcon
@@ -167,6 +193,11 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
 function SetButton({ text, updateSetType, setIndex }) {
   const [buttonText, setButtonText] = useState(text);
   const [buttonToggle, setButtonToggle] = useState(false);
+  const ref = useRef();
+
+  useOutsideClick(ref, () => {
+    setButtonToggle(false);
+  });
 
   useEffect(() => {
     setButtonText(text);
@@ -187,7 +218,10 @@ function SetButton({ text, updateSetType, setIndex }) {
   };
 
   return (
-    <div className="flex flex-col items-start">
+    <div
+      className="flex flex-col items-start relative"
+      ref={ref}
+    >
       <button
         className="bg-slate-50 rounded w-8"
         onClick={handleButtonClick}
@@ -196,23 +230,24 @@ function SetButton({ text, updateSetType, setIndex }) {
       </button>
       {buttonToggle ?
         <div className="flex flex-col bg-slate-50 rounded items-center 
-          justify-center list-none w-24 py-1 gap-1 px-2"
+          justify-center list-none w-24 py-1 gap-1 px-2 absolute top-full z-10
+          shadow-xl mt-1"
         >
           <li
             onClick={(e) => handleOptionClick("Warm-up")}
-            className="hover:font-semibold hover:text-indigo-600"
+            className="hover:bg-slate-200 w-full text-center rounded px-1"
           >
             Warm-up
           </li>
           <li
             onClick={(e) => handleOptionClick("Drop Set")}
-            className="hover:font-semibold hover:text-indigo-600"
+            className="hover:bg-slate-200 w-full text-center rounded px-1"
           >
             Drop Set
           </li>
           <li
             onClick={(e) => handleOptionClick("Failure")}
-            className="hover:font-semibold hover:text-indigo-600"
+            className="hover:bg-slate-200 w-full text-center rounded px-1"
           >
             Failure
           </li>

@@ -52,5 +52,89 @@
     "name": "Seated Calf Raise",
     "muscle": "Legs",
     "equipment": "Machine/Other"
+  },
+  {
+    "id": 10,
+    "name": "Lat Pulldown",
+    "muscle": "Back",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 11,
+    "name": "T Bar Row",
+    "muscle": "Back",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 12,
+    "name": "Seated Row",
+    "muscle": "Back",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 13,
+    "name": "Lat Pulldown (Single Arm)",
+    "muscle": "Back",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 14,
+    "name": "Bicep Curl",
+    "muscle": "Arms",
+    "equipment": "Dumbbell"
+  },
+  {
+    "id": 15,
+    "name": "Hammer Curl",
+    "muscle": "Arms",
+    "equipment": "Dumbbell"
+  },
+  {
+    "id": 16,
+    "name": "Seated Shoulder Press",
+    "muscle": "Shoulders",
+    "equipment": "Dumbbell"
+  },
+  {
+    "id": 17,
+    "name": "Iso Incline Press",
+    "muscle": "Chest",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 18,
+    "name": "Chest Fly",
+    "muscle": "Chest",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 19,
+    "name": "Iso Incline Press",
+    "muscle": "Chest",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 20,
+    "name": "Lateral Raise (Cable)",
+    "muscle": "Shoulders",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 21,
+    "name": "Triceps Pushdown",
+    "muscle": "Arms",
+    "equipment": "Machine/Other"
+  },
+  {
+    "id": 22,
+    "name": "Sissy Squats",
+    "muscle": "Legs",
+    "equipment": "Weighted Bodyweight"
+  },
+  {
+    "id": 23,
+    "name": "Romanian Deadlift (Dumbbell)",
+    "muscle": "Legs",
+    "equipment": "Dumbbell"
   }
 ]

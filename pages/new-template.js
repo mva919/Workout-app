@@ -3,24 +3,16 @@ import ExercisesSearch from "../components/ExercisesSearch";
 import ExerciseTracker from "../components/ExerciseTracker";
 import { v4 as uuid } from 'uuid';
 import { toast } from "react-hot-toast";
-import { TemplateContext } from "../lib/TemplateContext";
 import { useRouter } from "next/router";
 
-export default function WorkoutPage({ }) {
-  const { template, setTemplate } = useContext(TemplateContext);
-  const addedExercisesInitialState = Object.keys(template).length !== 0 ?
-    template.workouts : [];
-  const workoutTitleInitialState = Object.keys(template).length !== 0 ?
-    template.templateName : "";
+export default function NewTemplatePage({ }) {
   const [showExercises, setShowExercises] = useState(false);
-  const [addedExercises, setAddedExercises] = useState(
-    addedExercisesInitialState);
-  const [workoutTitle, setWorkoutTitle] = useState(workoutTitleInitialState);
+  const [addedExercises, setAddedExercises] = useState([]);
+  const [workoutTitle, setWorkoutTitle] = useState("");
   const router = useRouter();
 
-  const handleCancelWorkout = () => {
-    toast.error('Workout Canceled.');
-    setTemplate({});
+  const handleCancelTemplate = () => {
+    toast.error('Template Creation Canceled.');
     router.push("/template");
   };
 
@@ -29,11 +21,18 @@ export default function WorkoutPage({ }) {
   };
 
   const handleAddExerciseClick = (workout) => {
-    console.log(workout);
-    // console.log(addedExercises);
     setShowExercises(false);
-    setAddedExercises(addedExercises.concat({ ...workout, workoutId: uuid() }));
-    console.log(addedExercises);
+    setAddedExercises(addedExercises.concat({
+      ...workout,
+      workoutId: uuid(),
+      sets: [{
+        weight: "",
+        reps: "",
+        completed: false,
+        setId: uuid(),
+        setType: "normal"
+      }]
+    }));
   };
 
   const handleRemoveExerciseClick = (exercise) => {
@@ -51,8 +50,18 @@ export default function WorkoutPage({ }) {
     setWorkoutTitle(e.target.value);
   };
 
-  const handleWorkoutFinish = () => {
-    setWorkoutStarted(false);
+  const handleSaveTemplate = () => {
+    console.log(addedExercises);
+  };
+
+  const handleUpdateSets = (updatedSets, index) => {
+    console.log(updatedSets, index);
+    const exerciseArray = [...addedExercises];
+    const exercise = exerciseArray[index];
+    exercise.sets = updatedSets;
+    exerciseArray[index] = exercise;
+    setAddedExercises(exerciseArray);
+    console.log(addedExercises);
   };
 
   return (
@@ -72,15 +81,14 @@ export default function WorkoutPage({ }) {
           className="bg-green-400 rounded px-4 py-2 font-semibold
               shadow hover:bg-green-700 hover:text-white ease-in 
               duration-200"
-          onClick={handleWorkoutFinish}
+          onClick={handleSaveTemplate}
         >
-          Finish Workout
+          Save Template
         </button>
       </div>
-      <Timer />
 
       {addedExercises.length !== 0 ?
-        addedExercises.map((currExercise) => {
+        addedExercises.map((currExercise, exerciseIndex) => {
           return (
             <div
               key={currExercise.workoutId}
@@ -92,7 +100,10 @@ export default function WorkoutPage({ }) {
                   () => handleRemoveExerciseClick(currExercise)
                 }
                 exerciseSets={currExercise.sets}
-                previewMode={false}
+                previewMode={true}
+                updateSets={
+                  (updatedSet) => handleUpdateSets(updatedSet, exerciseIndex)
+                }
               />
             </div>
           );
@@ -123,44 +134,10 @@ export default function WorkoutPage({ }) {
         className="bg-red-400 rounded py-2 my-6 font-semibold block
             mx-auto w-1/2 text-white shadow hover:bg-red-700 ease-in
             duration-100 text-center"
-        onClick={handleCancelWorkout}
+        onClick={handleCancelTemplate}
       >
-        Cancel Workout
+        Cancel Template
       </button>
     </main >
-  );
-}
-
-function Timer() {
-  const [elapsedTime, setElapsedTime] = useState(0);
-
-  const refreshTimer = () => {
-    setElapsedTime((elapsedTime) => elapsedTime + 1);
-  };
-
-  useEffect(() => {
-    const timerId = setInterval(refreshTimer, 1000);
-
-    return () => clearInterval(timerId);
-  }, []);
-
-  return (
-    <div className="bg-slate-200 rounded flex flex-row w-24 justify-center
-    font-semibold cursor-default">
-      <p>
-        {Math.floor((elapsedTime / (60 * 60)) % 24) > 0 ?
-          Math.floor((elapsedTime / (60 * 60)) % 24) + ":" : ""}
-      </p>
-      <p>
-        {Math.floor((elapsedTime / 60) % 60) < 10 ?
-          ("0" + Math.floor((elapsedTime / 60) % 60)) :
-          Math.floor((elapsedTime / 60) % 60)}:
-      </p>
-      <p>
-        {Math.floor(elapsedTime % 60) < 10 ?
-          ("0" + Math.floor(elapsedTime % 60)) :
-          Math.floor(elapsedTime % 60)}
-      </p>
-    </div>
   );
 }

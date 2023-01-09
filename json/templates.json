@@ -1,59 +1,359 @@
 [
   {
     "templateId": 1,
-    "templateName": "Example Workout",
+    "templateName": "Pull Day",
     "workouts": [
       {
-        "id": 1,
-        "workoutId": 1,
+        "id": 10,
+        "workoutId": 10,
         "sets": [
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           },
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           },
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           }
         ]
       },
+      {
+        "id": 11,
+        "workoutId": 11,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "workoutId": 12,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "workoutId": 13,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "workoutId": 14,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "workoutId": 15,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "templateId": 2,
+    "templateName": "Push Day",
+    "workouts": [
       {
         "id": 2,
         "workoutId": 2,
         "sets": [
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           },
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           },
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           }
         ]
       },
       {
-        "id": 3,
-        "workoutId": 3,
+        "id": 16,
+        "workoutId": 16,
         "sets": [
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           },
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
           },
           {
             "weight": "",
-            "reps": "10"
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "workoutId": 17,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "workoutId": 18,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "workoutId": 19,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "workoutId": 20,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "workoutId": 21,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "templateId": 3,
+    "templateName": "Leg Day",
+    "workouts": [
+      {
+        "id": 7,
+        "workoutId": 7,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "workoutId": 5,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "workoutId": 22,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "workoutId": 23,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "workoutId": 8,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "workoutId": 9,
+        "sets": [
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
+          },
+          {
+            "weight": "",
+            "reps": "8"
           }
         ]
       }
