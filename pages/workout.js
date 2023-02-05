@@ -9,9 +9,9 @@ import { useRouter } from "next/router";
 export default function WorkoutPage({ }) {
   const { template, setTemplate } = useContext(TemplateContext);
   const addedExercisesInitialState = Object.keys(template).length !== 0 ?
-    template.workouts : [];
+    template.exercises : [];
   const workoutTitleInitialState = Object.keys(template).length !== 0 ?
-    template.templateName : "";
+    template.title : "";
   const [showExercises, setShowExercises] = useState(false);
   const [addedExercises, setAddedExercises] = useState(
     addedExercisesInitialState);
@@ -65,7 +65,7 @@ export default function WorkoutPage({ }) {
             onChange={handleTitleChange}
             value={workoutTitle}
             className="rounded hover:outline-indigo-500 hover:outline
-                ease-in duration-100"
+            ease-in duration-100"
           />
         </h1>
         <button

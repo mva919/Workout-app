@@ -11,10 +11,21 @@ export default function Home() {
   const { user, username } = useContext(UserContext);
 
   return (
-    <main className="container mx-auto">
+    <main className="container mx-auto ">
       {user ?
         username ?
-          <SignOutButton /> :
+          <div>
+            <div className="flex flex-row justify-between items-center">
+              <div>
+                <h1 className="text-xl">
+                  Hello {user.displayName.split(" ")[0]} 👋
+                </h1>
+                <h1 className="font-bold text-3xl">Welcome back!</h1>
+              </div>
+              <SignOutButton />
+            </div>
+          </div>
+          :
           <UsernameForm /> :
         <div className="flex flex-col items-center bg-slate-100 rounded w-1/3
         shadow h-64 mx-auto justify-between">
@@ -94,7 +105,9 @@ function UsernameForm() {
     batch.set(userDoc, {
       username: formValue,
       photoURL: user.photoURL,
-      displayName: user.displayName
+      displayName: user.displayName,
+      templates: [],
+      workoutSessions: []
     });
     batch.set(usernameDoc, { uid: user.uid });
 

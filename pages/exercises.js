@@ -6,7 +6,7 @@ export default function ExercisesPage({ }) {
 
   return (
     <main className="container mx-auto">
-      <h1 className="text-4xl font-bold">
+      <h1 className="text-4xl font-bold text-center">
         Exercises
       </h1>
       <ExercisesSearch isPage={true} />

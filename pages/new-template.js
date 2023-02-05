@@ -4,8 +4,12 @@ import ExerciseTracker from "../components/ExerciseTracker";
 import { v4 as uuid } from 'uuid';
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
+import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import { firestore } from "../lib/firebase";
+import { UserContext } from "../lib/UserContext";
 
 export default function NewTemplatePage({ }) {
+  const { user } = useContext(UserContext);
   const [showExercises, setShowExercises] = useState(false);
   const [addedExercises, setAddedExercises] = useState([]);
   const [workoutTitle, setWorkoutTitle] = useState("");
@@ -52,6 +56,29 @@ export default function NewTemplatePage({ }) {
 
   const handleSaveTemplate = () => {
     console.log(addedExercises);
+    console.log(user.uid);
+
+    const userDoc = doc(firestore, "users", user.uid);
+    console.log(userDoc);
+
+    updateExistingDoc();
+    router.push("/template");
+  }
+
+  const updateExistingDoc = async () => {
+    const userDoc = doc(firestore, "users", user.uid);
+
+    await updateDoc(userDoc, {
+      templates: arrayUnion({
+        title: workoutTitle === "" ? "New Workout" : workoutTitle,
+        exercises: addedExercises,
+        templateId: uuid()
+      })
+    }).then(() => {
+      console.log("Write to firestore. Added new template to user.");
+    }).catch(error => {
+      console.log(error);
+    });
   };
 
   const handleUpdateSets = (updatedSets, index) => {

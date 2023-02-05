@@ -1,8 +1,8 @@
 [
   {
     "templateId": 1,
-    "templateName": "Pull Day",
-    "workouts": [
+    "title": "Pull Day",
+    "exercises": [
       {
         "id": 10,
         "workoutId": 10,
@@ -115,8 +115,8 @@
   },
   {
     "templateId": 2,
-    "templateName": "Push Day",
-    "workouts": [
+    "title": "Push Day",
+    "exercises": [
       {
         "id": 2,
         "workoutId": 2,
@@ -247,8 +247,8 @@
   },
   {
     "templateId": 3,
-    "templateName": "Leg Day",
-    "workouts": [
+    "title": "Leg Day",
+    "exercises": [
       {
         "id": 7,
         "workoutId": 7,

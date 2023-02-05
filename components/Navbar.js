@@ -15,12 +15,6 @@ export default function Navbar({ }) {
           </li>
         </Link>
 
-        <Link href="/history">
-          <li className="hover:text-indigo-500">
-            History
-          </li>
-        </Link>
-
         <Link href="/template">
           <li className="hover:text-indigo-500">
             Start Workout
