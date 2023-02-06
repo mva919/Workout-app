@@ -5,7 +5,7 @@ import { useOutsideClick } from "../lib/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-export default function ExercisesSearch({ handleExerciseClick, isPage }) {
+export default function ExercisesSearch({ handleAddClick, isPage }) {
   const exercises = useContext(ExercisesContext);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
@@ -72,6 +72,7 @@ export default function ExercisesSearch({ handleExerciseClick, isPage }) {
             className="bg-indigo-500 text-white px-4 py-1 rounded
           enabled:hover:bg-indigo-700 ease-in duration-100 disabled:opacity-75"
             disabled={selectedWorkouts.length === 0}
+            onClick={(e) => handleAddClick(selectedWorkouts[0])}
           >
             {selectedWorkouts.length === 0 ? "Add Workout" :
               selectedWorkouts.length > 1 ?

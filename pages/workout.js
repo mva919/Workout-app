@@ -28,12 +28,13 @@ export default function WorkoutPage({ }) {
     setShowExercises(true);
   };
 
-  const handleAddExerciseClick = (workout) => {
-    console.log(workout);
+  const handleAddExerciseClick = (workouts) => {
+    // console.log(workout);
     // console.log(addedExercises);
     setShowExercises(false);
-    setAddedExercises(addedExercises.concat({ ...workout, workoutId: uuid() }));
-    console.log(addedExercises);
+    
+    setAddedExercises(prevState => [...prevState, workouts]);
+    // console.log(workouts.map(elem => { return {workout: elem.workout, workoutId: uuid()}}));
   };
 
   const handleRemoveExerciseClick = (exercise) => {
@@ -113,7 +114,7 @@ export default function WorkoutPage({ }) {
         :
         <div className="bg-slate-200 rounded h-[32rem]">
           <ExercisesSearch
-            handleExerciseClick={handleAddExerciseClick}
+            handleAddClick={handleAddExerciseClick}
             isPage={false}
           />
         </div>
