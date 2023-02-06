@@ -47,7 +47,14 @@ export default function ExercisesSearch({ handleExerciseClick, isPage }) {
   };
 
   return (
-    <div className="text-center rounded py-4 my-2">
+    <div className="text-center rounded py-4 my-2 h-full">
+      {!isPage &&
+        <div className="flex justify-end pr-6">
+          <button className="bg-indigo-500 text-white px-4 py-1 rounded">
+            Add Workout
+          </button>
+        </div>
+      }
       <form onSubmit={handleSubmit}>
         <input
           className={`my-4 rounded px-2 py-2 w-1/2 
@@ -75,31 +82,33 @@ export default function ExercisesSearch({ handleExerciseClick, isPage }) {
         />
       </div>
 
-      <ul
-        className={`flex flex-col items-start mx-auto w-1/2 shadow-sm rounded
-        ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
-      >
-        {/* ready state, displaying json data */}
-        {workoutList.length !== 0 ? workoutList.map((workout) => {
-          return (
-            <li
-              key={workout.id}
-              className={`cursor-pointer flex flex-col items-start
-              justify-center px-4 py-1 border-b w-full 
-              hover:rounded hover:bg-slate-300
-              ${isPage ? "border-slate-300" : "border-slate-200"}`}
-              onClick={(e) => handleExerciseClick(workout)}
-            >
-              <p className="font-semibold">{workout.name}</p>
-              <p>{workout.muscle}</p>
-            </li>
-          );
-        }) :
-          <h3 className="mx-auto py-2 font-semibold text-slate-500">
-            No results
-          </h3>
-        }
-      </ul>
+      <div className="h-full">
+        <ul
+          className={`flex flex-col items-start mx-auto w-1/2 shadow-sm rounded
+          overflow-y-scroll h-2/3 ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
+        >
+          {/* ready state, displaying json data */}
+          {workoutList.length !== 0 ? workoutList.map((workout) => {
+            return (
+              <li
+                key={workout.id}
+                className={`cursor-pointer flex flex-col items-start
+            justify-center px-4 py-1 border-b w-full 
+            hover:rounded hover:bg-slate-300
+            ${isPage ? "border-slate-300" : "border-slate-200"}`}
+                onClick={(e) => handleExerciseClick(workout)}
+              >
+                <p className="font-semibold">{workout.name}</p>
+                <p>{workout.muscle}</p>
+              </li>
+            );
+          }) :
+            <h3 className="mx-auto py-2 font-semibold text-slate-500">
+              No results
+            </h3>
+          }
+        </ul>
+      </div>
     </div >
   );
 }

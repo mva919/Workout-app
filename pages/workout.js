@@ -111,7 +111,7 @@ export default function WorkoutPage({ }) {
           Add Workout
         </button>
         :
-        <div className="bg-slate-200 rounded">
+        <div className="bg-slate-200 rounded h-[32rem]">
           <ExercisesSearch
             handleExerciseClick={handleAddExerciseClick}
             isPage={false}
