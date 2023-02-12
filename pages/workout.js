@@ -28,13 +28,15 @@ export default function WorkoutPage({ }) {
     setShowExercises(true);
   };
 
-  const handleAddExerciseClick = (workouts) => {
-    // console.log(workout);
-    // console.log(addedExercises);
+  const handleAddExerciseClick = (exercises) => {
+    const filteredExercises = exercises.map(exercise => {
+      return { ...exercise.workout, exerciseId: uuid() }
+    });
+    console.log(filteredExercises);
     setShowExercises(false);
-    
-    setAddedExercises(prevState => [...prevState, workouts]);
-    // console.log(workouts.map(elem => { return {workout: elem.workout, workoutId: uuid()}}));
+    setAddedExercises(prevExercises =>
+      [...prevExercises, ...filteredExercises]);
+    console.log(addedExercises);
   };
 
   const handleRemoveExerciseClick = (exercise) => {
@@ -52,8 +54,18 @@ export default function WorkoutPage({ }) {
     setWorkoutTitle(e.target.value);
   };
 
+  const handleExerciseChange = (sets, exerciseUid) => {
+    let prevExercises = [...addedExercises];
+    const exerciseIndex = prevExercises.findIndex(exercise =>
+      exercise.exerciseId === exerciseUid);
+    const selectedExercise = addedExercises[exerciseIndex];
+    selectedExercise.sets = sets;
+    prevExercises[exerciseIndex] = selectedExercise;
+    setAddedExercises(prevExercises);
+  };
+
   const handleWorkoutFinish = () => {
-    setWorkoutStarted(false);
+    console.log(addedExercises);
   };
 
   return (
@@ -84,16 +96,18 @@ export default function WorkoutPage({ }) {
         addedExercises.map((currExercise) => {
           return (
             <div
-              key={currExercise.workoutId}
+              key={currExercise.exerciseId}
               className="bg-slate-200 shadow rounded px-4 py-1 my-2"
             >
               <ExerciseTracker
+                uid={currExercise.exerciseId}
                 exerciseId={currExercise.id}
                 handleRemoveClick={
                   () => handleRemoveExerciseClick(currExercise)
                 }
                 exerciseSets={currExercise.sets}
                 previewMode={false}
+                updateSets={handleExerciseChange}
               />
             </div>
           );
@@ -116,6 +130,7 @@ export default function WorkoutPage({ }) {
           <ExercisesSearch
             handleAddClick={handleAddExerciseClick}
             isPage={false}
+            displayComponent={setShowExercises}
           />
         </div>
       }

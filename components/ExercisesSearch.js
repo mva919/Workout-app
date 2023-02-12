@@ -3,9 +3,10 @@ import { ExercisesContext } from "../lib/ExercisesContext";
 import { BODY_PARTS, EXERCISE_CATEGORIES } from "../lib/constants";
 import { useOutsideClick } from "../lib/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export default function ExercisesSearch({ handleAddClick, isPage }) {
+export default function ExercisesSearch({ handleAddClick, isPage,
+  displayComponent }) {
   const exercises = useContext(ExercisesContext);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
@@ -67,17 +68,21 @@ export default function ExercisesSearch({ handleAddClick, isPage }) {
   return (
     <div className="text-center rounded py-4 my-2 h-full">
       {!isPage &&
-        <div className="flex justify-end pr-6">
+        <div className="flex justify-between px-6 items-center">
+          <FontAwesomeIcon icon={faXmark}
+            className="text-red-600 text-3xl hover:text-red-700"
+            onClick={(e) => displayComponent(false)}
+          />
           <button
             className="bg-indigo-500 text-white px-4 py-1 rounded
           enabled:hover:bg-indigo-700 ease-in duration-100 disabled:opacity-75"
             disabled={selectedWorkouts.length === 0}
-            onClick={(e) => handleAddClick(selectedWorkouts[0])}
+            onClick={(e) => handleAddClick(selectedWorkouts)}
           >
             {selectedWorkouts.length === 0 ? "Add Workout" :
               selectedWorkouts.length > 1 ?
-                `Add ${selectedWorkouts.length} workouts` :
-                `Add ${selectedWorkouts.length} workout`
+                `Add (${selectedWorkouts.length}) workouts` :
+                `Add (${selectedWorkouts.length}) workout`
             }
           </button>
         </div>

@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 import { ExercisesContext } from "../lib/ExercisesContext";
 import { useOutsideClick } from "../lib/hooks";
 
-export default function ExerciseTracker({ exerciseId, handleRemoveClick,
+export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
   exerciseSets, previewMode, updateSets }) {
   const exercises = useContext(ExercisesContext);
   const exercise = exercises.find((exercise) => exercise.id === exerciseId);
@@ -25,7 +25,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
       weight: "", reps: "", completed: false, setId: uuid(), setType: "normal"
     }));
     console.log(sets);
-    updateSets(sets);
+    updateSets(sets, uid);
   };
 
   const handleWeightChange = (e, index) => {
@@ -34,7 +34,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     set.weight = e.target.value;
     setsArray[index] = set;
     setSets(setsArray);
-    updateSets(setsArray);
+    updateSets(setsArray, uid);
   };
 
   const handleRepChange = (e, index) => {
@@ -43,7 +43,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     set.reps = e.target.value;
     setsArray[index] = set;
     setSets(setsArray);
-    updateSets(setsArray);
+    updateSets(setsArray, uid);
   };
 
   const handleCompletedChange = (index) => {
@@ -55,7 +55,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
       set.completed = !set.completed;
       setsArray[index] = set;
       setSets(setsArray);
-      updateSets(setsArray);
+      updateSets(setsArray, uid);
     }
     console.log(sets);
   };
@@ -66,7 +66,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     set.setType = setType;
     setsArray[index] = set;
     setSets(setsArray);
-    updateSets(setsArray);
+    updateSets(setsArray, uid);
     console.log(setsArray);
   };
 
@@ -74,7 +74,7 @@ export default function ExerciseTracker({ exerciseId, handleRemoveClick,
     let setsArray = [...sets];
     setsArray.splice(index, 1);
     setSets(setsArray);
-    updateSets(setsArray);
+    updateSets(setsArray, uid);
     console.log(setsArray);
   };
 
