@@ -4,17 +4,30 @@ import { BODY_PARTS, EXERCISE_CATEGORIES } from "../lib/constants";
 import { useOutsideClick } from "../lib/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-hot-toast";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { v4 as uuid } from 'uuid';
+import { firestore } from "../lib/firebase";
+import { UserContext } from "../lib/UserContext";
 
 export default function ExercisesSearch({ handleAddClick, isPage,
   displayComponent }) {
+  const { user } = useContext(UserContext);
+  const [customExercises, setCustomExercises] = useState([]);
   const exercises = useContext(ExercisesContext);
+  const [userExercises, setUserExercises] = useState(exercises);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
   const [category, setCategory] = useState("");
-  const [workoutList, setWorkoutList] = useState(exercises);
+  const [workoutList, setWorkoutList] = useState(userExercises);
   const [selectedWorkouts, setSelectedWorkouts] = useState([]);
+  const [showCreateWorkout, setShowCreateWorkout] = useState(false);
 
   useEffect(() => {
+    if (!customExercises.length) {
+      console.log("Retrieving user's custom exercises.");
+      getCustomExercises();
+    }
     const filteredWorkouts = searchWorkoutList(
       searchWorkout, bodyPart, category);
     setWorkoutList(filteredWorkouts);
@@ -46,17 +59,20 @@ export default function ExercisesSearch({ handleAddClick, isPage,
     e.preventDefault();
   };
 
+  const handleNewWorkout = () => {
+    setShowCreateWorkout(true);
+  };
+
   const searchWorkoutList = (searchVal, bodyFilter, categoryFilter) => {
     // converts the first letter of each word to upper case to match with the
     // workouts list and removes any extra spaces.
-    console.log(searchVal, bodyFilter, categoryFilter);
-
     const convertedStr = searchVal.trim().split(/\s+/).map((word) => {
       if (word[0] === undefined) return;
       return word[0].toUpperCase() + word.substring(1);
     }).join(" ");
 
-    const resultsArray = exercises.filter(workout => {
+    console.log(userExercises);
+    const resultsArray = userExercises.filter(workout => {
       return workout.muscle.includes(bodyFilter) &&
         workout.equipment.includes(categoryFilter)
         && workout.name.includes(convertedStr);
@@ -65,53 +81,111 @@ export default function ExercisesSearch({ handleAddClick, isPage,
     return resultsArray;
   };
 
+  const getCustomExercises = async () => {
+    if (user) {
+      const docRef = doc(firestore, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Read from firestore! Document data: ", docSnap.data());
+        setCustomExercises(docSnap.data().customExercises);
+        setUserExercises([...exercises, ...docSnap.data().customExercises]);
+      } else {
+        console.log("There is no user with that uid.");
+      }
+    }
+  };
+
   return (
-    <div className="text-center rounded py-4 my-2 h-full">
-      {!isPage &&
+    <div className="text-center rounded py-4 my-2 h-full relative">
+
+      {!isPage && !showCreateWorkout &&
         <div className="flex justify-between px-6 items-center">
           <FontAwesomeIcon icon={faXmark}
             className="text-red-600 text-3xl hover:text-red-700"
             onClick={(e) => displayComponent(false)}
           />
-          <button
-            className="bg-indigo-500 text-white px-4 py-1 rounded
-          enabled:hover:bg-indigo-700 ease-in duration-100 disabled:opacity-75"
-            disabled={selectedWorkouts.length === 0}
-            onClick={(e) => handleAddClick(selectedWorkouts)}
-          >
-            {selectedWorkouts.length === 0 ? "Add Workout" :
-              selectedWorkouts.length > 1 ?
-                `Add (${selectedWorkouts.length}) workouts` :
-                `Add (${selectedWorkouts.length}) workout`
-            }
-          </button>
+          <div className="flex flex-row items-center gap-6">
+            <button
+              className="bg-indigo-500 text-white px-4 py-1 rounded
+              enabled:hover:bg-indigo-700 ease-in duration-100
+              disabled:bg-slate-300 disabled:text-slate-400"
+              onClick={handleNewWorkout}
+              disabled={!user}
+            >
+              New Workout
+            </button>
+            <button
+              className="bg-indigo-500 text-white px-4 py-1 rounded
+              enabled:hover:bg-indigo-700 ease-in duration-100 
+              disabled:opacity-75"
+              disabled={selectedWorkouts.length === 0}
+              onClick={(e) => handleAddClick(selectedWorkouts)}
+            >
+              {selectedWorkouts.length === 0 ? "Add Workout" :
+                selectedWorkouts.length > 1 ?
+                  `Add (${selectedWorkouts.length}) workouts` :
+                  `Add (${selectedWorkouts.length}) workout`
+              }
+            </button>
+          </div>
         </div>
       }
+
       <form onSubmit={handleSubmit}>
-        <input
-          className={`my-4 rounded px-2 py-2 w-1/2 
-          ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
-          type="text"
-          placeholder="Search"
-          id="search"
-          value={searchWorkout}
-          onChange={handleChange}
-        />
+        <div className="flex justify-center">
+          <div className="flex flex-col items-start justify-center w-1/2">
+            {isPage &&
+              <button
+                className="bg-indigo-500 text-white px-4 py-1 rounded
+                enabled:hover:bg-indigo-700 ease-in duration-100 
+                disabled:bg-slate-200 disabled:text-slate-400"
+                onClick={handleNewWorkout}
+                disabled={!user}
+              >
+                New Workout
+              </button>
+            }
+            <input
+              className={`my-4 rounded px-2 py-2 w-full 
+            ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
+              type="text"
+              placeholder="Search"
+              id="search"
+              value={searchWorkout}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
       </form>
 
       <div className="flex flex-row items-start justify-center gap-2">
         <DropdownButton
           dropdownOptions={EXERCISE_CATEGORIES}
           buttonName="Any Category"
-          selectedCategory={btnCategory => setCategory(btnCategory)}
+          selectedCategory={setCategory}
           isDark={isPage}
         />
         <DropdownButton
           dropdownOptions={BODY_PARTS}
           buttonName="Any Body Part"
-          selectedCategory={btnBodyPart => setBodyPart(btnBodyPart)}
+          selectedCategory={setBodyPart}
           isDark={isPage}
         />
+      </div>
+
+      <div className="absolute w-full bg-blue-100">
+
+        {showCreateWorkout &&
+
+          <div className="flex justify-center z-10 my-4">
+            <WorkoutCreator
+              isPage={isPage}
+              showComponent={setShowCreateWorkout}
+              refreshExercises={getCustomExercises}
+            />
+          </div>
+        }
       </div>
 
       <div className="h-full">
@@ -213,6 +287,95 @@ function DropdownButton({ dropdownOptions, buttonName,
           })}
         </div>
       }
+    </div>
+  );
+}
+
+function WorkoutCreator({ isPage, showComponent, refreshExercises }) {
+  const [category, setCategory] = useState("");
+  const [bodyPart, setBodyPart] = useState("");
+  const [exerciseName, setExerciseName] = useState("");
+  const { user } = useContext(UserContext);
+
+  const handleChange = (e) => {
+    setExerciseName(e.target.value);
+  };
+
+  const handleSave = () => {
+    console.log(category, bodyPart, exerciseName);
+    if (exerciseName === "") {
+      toast.error("Exercise name can not be empty.");
+      return;
+    }
+    if (category === "" || bodyPart === "") {
+      toast.error("Must select a category and body part.");
+      return;
+    }
+    updateExistingDoc();
+    refreshExercises();
+    showComponent(false);
+  };
+
+  const updateExistingDoc = async () => {
+    const userDoc = doc(firestore, "users", user.uid);
+
+    await updateDoc(userDoc, {
+      customExercises: arrayUnion({
+        id: uuid(),
+        name: exerciseName,
+        muscle: bodyPart,
+        equipment: category
+      })
+    }).then(() => {
+      console.log("Write to firestore. Added new custom exercise for user.");
+    }).catch(error => {
+      console.log(error);
+    });
+  };
+
+
+  return (
+    <div className={`rounded shadow px-4 py-2 
+    ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
+    >
+      <div className="flex flex-row justify-between py-4">
+        <FontAwesomeIcon
+          icon={faXmark}
+          className={`text-xl px-2 py-1 rounded hover:bg-red-500 
+          hover:text-white ease-in duration-150
+          ${isPage ? "bg-slate-50" : "bg-slate-200"}`}
+          onClick={(e) => showComponent(false)}
+        />
+        <h1 className="font-bold">Create New Exercise</h1>
+        <button
+          className="font-semibold disabled:text-gray-500"
+          onClick={handleSave}
+        >
+          Save
+        </button>
+      </div>
+
+      <input
+        type="text"
+        className={`rounded my-4 px-2 py-2 w-full 
+          ${!isPage ? "bg-slate-200" : "bg-slate-50"}`}
+        value={exerciseName}
+        onChange={(e) => handleChange(e)}
+      />
+      <div className="flex flex-row items-start justify-center gap-2">
+        <DropdownButton
+          dropdownOptions={EXERCISE_CATEGORIES}
+          buttonName="Any Category"
+          selectedCategory={setCategory}
+          isDark={!isPage}
+        />
+        <DropdownButton
+          dropdownOptions={BODY_PARTS}
+          buttonName="Any Body Part"
+          selectedCategory={setBodyPart}
+          isDark={!isPage}
+        />
+      </div>
     </div>
   );
 }

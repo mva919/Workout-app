@@ -5,8 +5,12 @@ import { v4 as uuid } from 'uuid';
 import { toast } from "react-hot-toast";
 import { TemplateContext } from "../lib/TemplateContext";
 import { useRouter } from "next/router";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { firestore } from "../lib/firebase";
+import { UserContext } from "../lib/UserContext";
 
 export default function WorkoutPage({ }) {
+  const { user } = useContext(UserContext);
   const { template, setTemplate } = useContext(TemplateContext);
   const addedExercisesInitialState = Object.keys(template).length !== 0 ?
     template.exercises : [];
@@ -66,6 +70,26 @@ export default function WorkoutPage({ }) {
 
   const handleWorkoutFinish = () => {
     console.log(addedExercises);
+    updateExistingDoc();
+    router.push("/template");
+    toast.success("Workout completed");
+  };
+
+  const updateExistingDoc = async () => {
+    const userDoc = doc(firestore, "users", user.uid);
+
+    await updateDoc(userDoc, {
+      previousWorkouts: arrayUnion({
+        title: workoutTitle === "" ? "New Workout" : workoutTitle,
+        exercises: addedExercises,
+        templateId: uuid(),
+        dateCompleted: new Date().toISOString()
+      })
+    }).then(() => {
+      console.log("Write to firestore. Added new workout session for user.");
+    }).catch(error => {
+      console.log(error);
+    });
   };
 
   return (
