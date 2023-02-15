@@ -1,15 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import ExercisesSearch from "../components/ExercisesSearch";
 import ExerciseTracker from "../components/ExerciseTracker";
 import { v4 as uuid } from 'uuid';
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
-import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../lib/firebase";
 import { UserContext } from "../lib/UserContext";
+import { ExercisesContext } from "../lib/ExercisesContext";
 
 export default function NewTemplatePage({ }) {
-  const { user } = useContext(UserContext);
+  const { user, customExercises } = useContext(UserContext);
+  const defaultExercises = useContext(ExercisesContext);
   const [showExercises, setShowExercises] = useState(false);
   const [addedExercises, setAddedExercises] = useState([]);
   const [workoutTitle, setWorkoutTitle] = useState("");
@@ -24,19 +26,24 @@ export default function NewTemplatePage({ }) {
     setShowExercises(true);
   };
 
-  const handleAddExerciseClick = (workout) => {
+  const handleAddExerciseClick = (exercises) => {
+    const filteredExercises = exercises.map(exercise => {
+      return {
+        ...exercise.workout,
+        exerciseId: uuid(),
+        sets: [{
+          weight: "",
+          reps: "",
+          completed: false,
+          setId: uuid(),
+          setType: "normal"
+        }]
+      }
+    });
+
+    setAddedExercises(prevExercises =>
+      [...prevExercises, ...filteredExercises]);
     setShowExercises(false);
-    setAddedExercises(addedExercises.concat({
-      ...workout,
-      workoutId: uuid(),
-      sets: [{
-        weight: "",
-        reps: "",
-        completed: false,
-        setId: uuid(),
-        setType: "normal"
-      }]
-    }));
   };
 
   const handleRemoveExerciseClick = (exercise) => {
@@ -105,8 +112,8 @@ export default function NewTemplatePage({ }) {
           />
         </h1>
         <button
-          className="bg-green-400 rounded px-4 py-2 font-semibold
-              shadow hover:bg-green-700 hover:text-white ease-in 
+          className="bg-green-500 rounded px-4 py-2 font-semibold
+              shadow hover:bg-green-700 text-white ease-in 
               duration-200"
           onClick={handleSaveTemplate}
         >
@@ -122,6 +129,7 @@ export default function NewTemplatePage({ }) {
               className="bg-slate-200 shadow rounded px-4 py-1 my-2"
             >
               <ExerciseTracker
+                uid={currExercise.exerciseId}
                 exerciseId={currExercise.id}
                 handleRemoveClick={
                   () => handleRemoveExerciseClick(currExercise)
@@ -131,6 +139,7 @@ export default function NewTemplatePage({ }) {
                 updateSets={
                   (updatedSet) => handleUpdateSets(updatedSet, exerciseIndex)
                 }
+                exercises={[...defaultExercises, ...customExercises]}
               />
             </div>
           );
@@ -151,8 +160,9 @@ export default function NewTemplatePage({ }) {
         :
         <div className="bg-slate-200 rounded">
           <ExercisesSearch
-            handleExerciseClick={handleAddExerciseClick}
+            handleAddClick={handleAddExerciseClick}
             isPage={false}
+            displayComponent={setShowExercises}
           />
         </div>
       }

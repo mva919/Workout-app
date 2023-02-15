@@ -1,30 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ExercisesContext } from "../lib/ExercisesContext";
-import { v4 as uuid } from 'uuid';
 import { useDefaultTemplates } from "../lib/hooks";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { TemplateContext } from "../lib/TemplateContext";
 import { UserContext } from "../lib/UserContext";
 import { toast } from "react-hot-toast";
-import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "../lib/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 export default function TemplatePage({ }) {
-  const { user, username } = useContext(UserContext);
+  const { user, customTemplates } = useContext(UserContext);
   const { template, setTemplate } = useContext(TemplateContext);
   const defaultTemplates = useDefaultTemplates();
-  const [templates, setTemplates] = useState([]);
   const [showCustomTemplates, setShowCustomTemplates] = useState(true);
   const [showDefaultTemplates, setShowDefaultTemplates] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    console.log(user, username);
-    getUserTemplates();
-  }, []);
 
   const handleStartDefaultWorkout = (templateId) => {
     const defaultTemplate = defaultTemplates.find((template) =>
@@ -36,7 +27,7 @@ export default function TemplatePage({ }) {
   };
 
   const handleStartCustomWorkout = (templateId) => {
-    const customTemplate = templates.find((template) =>
+    const customTemplate = customTemplates.find((template) =>
       template.templateId === templateId
     );
 
@@ -53,21 +44,6 @@ export default function TemplatePage({ }) {
     }
     else {
       router.push("/new-template");
-    }
-  };
-
-  const getUserTemplates = async () => {
-    if (user) {
-      const docRef = doc(firestore, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("Read from firestore! Document data: ", docSnap.data());
-        setTemplates(docSnap.data().templates);
-      } else {
-        console.log("There is no user with that uid.");
-      }
-
     }
   };
 
@@ -93,29 +69,29 @@ export default function TemplatePage({ }) {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row justify-start items-center gap-2">
             <h3 className="font-bold">
-              My templates ({templates.length})
+              My templates ({customTemplates.length})
             </h3>
             <ChevronToggler setShowTemplates={setShowCustomTemplates} />
           </div>
           <button
-            className="bg-slate-200 rounded-md px-4 py-1 
-          hover:bg-indigo-500 hover:text-white ease-in duration-200"
+            className="bg-green-500 rounded-md px-4 py-1 
+          hover:bg-green-700 text-white ease-in duration-200"
             onClick={handleAddTemplate}
           >
-            + Template
+            Add New Template
           </button>
         </div>
         {showCustomTemplates ?
           <div>
             {
-              templates.length === 0 ?
+              customTemplates.length === 0 ?
                 <h1 className="block text-center text-slate-500 my-2 text-lg">
                   No templates
                 </h1>
                 :
                 <div className="my-4 flex flex-row gap-3 items-stretch
                 justify-start flex-wrap">
-                  {templates.map(template => {
+                  {customTemplates.map(template => {
                     return (
                       <TemplatePreview
                         key={template.templateId}
@@ -166,10 +142,10 @@ function TemplatePreview({ template, startWorkout }) {
   const PREVIEW_MAX = 6;
 
   return (
-    <div className="bg-slate-100 outline outline-2 outline-slate-500 shadow
-     w-64 p-2 rounded flex flex-col justify-between">
+    <div className="bg-white drop-shadow-md hover:drop-shadow-2xl w-64 p-2 
+    rounded-lg flex flex-col justify-between">
       <div>
-        <h1 className="font-semibold">{template.templateName}</h1>
+        <h1 className="font-bold">{template.title}</h1>
         {template.exercises.slice(0, PREVIEW_MAX).map((workout, index) => {
           return (
             <div key={index}>

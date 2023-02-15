@@ -5,17 +5,17 @@ import { useOutsideClick } from "../lib/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-hot-toast";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { v4 as uuid } from 'uuid';
 import { firestore } from "../lib/firebase";
 import { UserContext } from "../lib/UserContext";
 
 export default function ExercisesSearch({ handleAddClick, isPage,
   displayComponent }) {
-  const { user } = useContext(UserContext);
-  const [customExercises, setCustomExercises] = useState([]);
+  const { user, customExercises } = useContext(UserContext);
   const exercises = useContext(ExercisesContext);
-  const [userExercises, setUserExercises] = useState(exercises);
+  const [userExercises, setUserExercises] =
+    useState([...exercises, ...customExercises]);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
   const [category, setCategory] = useState("");
@@ -24,14 +24,10 @@ export default function ExercisesSearch({ handleAddClick, isPage,
   const [showCreateWorkout, setShowCreateWorkout] = useState(false);
 
   useEffect(() => {
-    if (!customExercises.length) {
-      console.log("Retrieving user's custom exercises.");
-      getCustomExercises();
-    }
     const filteredWorkouts = searchWorkoutList(
       searchWorkout, bodyPart, category);
     setWorkoutList(filteredWorkouts);
-  }, [bodyPart, category]);
+  }, [bodyPart, category, userExercises]);
 
   const handleChange = (e) => {
     setSearchWorkout(e.target.value);
@@ -79,21 +75,6 @@ export default function ExercisesSearch({ handleAddClick, isPage,
     });
 
     return resultsArray;
-  };
-
-  const getCustomExercises = async () => {
-    if (user) {
-      const docRef = doc(firestore, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("Read from firestore! Document data: ", docSnap.data());
-        setCustomExercises(docSnap.data().customExercises);
-        setUserExercises([...exercises, ...docSnap.data().customExercises]);
-      } else {
-        console.log("There is no user with that uid.");
-      }
-    }
   };
 
   return (
@@ -182,7 +163,7 @@ export default function ExercisesSearch({ handleAddClick, isPage,
             <WorkoutCreator
               isPage={isPage}
               showComponent={setShowCreateWorkout}
-              refreshExercises={getCustomExercises}
+              refreshExercises={setUserExercises}
             />
           </div>
         }
@@ -312,25 +293,28 @@ function WorkoutCreator({ isPage, showComponent, refreshExercises }) {
       return;
     }
     updateExistingDoc();
-    refreshExercises();
     showComponent(false);
   };
 
   const updateExistingDoc = async () => {
     const userDoc = doc(firestore, "users", user.uid);
 
+    const newExercise = {
+      id: uuid(),
+      name: exerciseName,
+      muscle: bodyPart,
+      equipment: category
+    };
+
     await updateDoc(userDoc, {
-      customExercises: arrayUnion({
-        id: uuid(),
-        name: exerciseName,
-        muscle: bodyPart,
-        equipment: category
-      })
+      customExercises: arrayUnion(newExercise)
     }).then(() => {
       console.log("Write to firestore. Added new custom exercise for user.");
     }).catch(error => {
       console.log(error);
     });
+
+    refreshExercises(prevExercises => [...prevExercises, newExercise]);
   };
 
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import { ExercisesContext } from '../lib/ExercisesContext';

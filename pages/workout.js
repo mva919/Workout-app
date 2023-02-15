@@ -8,9 +8,11 @@ import { useRouter } from "next/router";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../lib/firebase";
 import { UserContext } from "../lib/UserContext";
+import { ExercisesContext } from "../lib/ExercisesContext";
 
 export default function WorkoutPage({ }) {
-  const { user } = useContext(UserContext);
+  const defaultExercises = useContext(ExercisesContext);
+  const { user, customExercises, workoutHistory } = useContext(UserContext);
   const { template, setTemplate } = useContext(TemplateContext);
   const addedExercisesInitialState = Object.keys(template).length !== 0 ?
     template.exercises : [];
@@ -33,14 +35,15 @@ export default function WorkoutPage({ }) {
   };
 
   const handleAddExerciseClick = (exercises) => {
+    console.log(customExercises, workoutHistory);
     const filteredExercises = exercises.map(exercise => {
       return { ...exercise.workout, exerciseId: uuid() }
     });
     console.log(filteredExercises);
-    setShowExercises(false);
     setAddedExercises(prevExercises =>
       [...prevExercises, ...filteredExercises]);
     console.log(addedExercises);
+    setShowExercises(false);
   };
 
   const handleRemoveExerciseClick = (exercise) => {
@@ -132,6 +135,7 @@ export default function WorkoutPage({ }) {
                 exerciseSets={currExercise.sets}
                 previewMode={false}
                 updateSets={handleExerciseChange}
+                exercises={[...defaultExercises, ...customExercises]}
               />
             </div>
           );

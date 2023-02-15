@@ -7,8 +7,8 @@ import { ExercisesContext } from "../lib/ExercisesContext";
 import { useOutsideClick } from "../lib/hooks";
 
 export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
-  exerciseSets, previewMode, updateSets }) {
-  const exercises = useContext(ExercisesContext);
+  exerciseSets, previewMode, updateSets, exercises }) {
+  // const exercises = useContext(ExercisesContext);
   const exercise = exercises.find((exercise) => exercise.id === exerciseId);
   const setsInitialState = exerciseSets !== undefined ?
     exerciseSets.map((exercise) => {
