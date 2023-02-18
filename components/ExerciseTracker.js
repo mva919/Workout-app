@@ -1,14 +1,12 @@
-import { faCheck, faLock, faRulerHorizontal, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faLock, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { v4 as uuid } from "uuid";
-import { ExercisesContext } from "../lib/ExercisesContext";
 import { useOutsideClick } from "../lib/hooks";
 
 export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
   exerciseSets, previewMode, updateSets, exercises }) {
-  // const exercises = useContext(ExercisesContext);
   const exercise = exercises.find((exercise) => exercise.id === exerciseId);
   const setsInitialState = exerciseSets !== undefined ?
     exerciseSets.map((exercise) => {

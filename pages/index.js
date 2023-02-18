@@ -1,14 +1,25 @@
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faChild, faClock, faRightFromBracket, faRuler, faWeightScale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
 import debounce from "lodash.debounce";
 import { useCallback, useContext, useEffect, useState } from "react"
+import ChevronToggler from "../components/ChevronToggler";
 import { auth, firestore } from "../lib/firebase";
 import { UserContext } from "../lib/UserContext";
 
 export default function Home() {
-  const { user, username } = useContext(UserContext);
+  const { user, username, bodyMeasurements, workoutHistory } = useContext(UserContext);
+  const [showPreviousWorkouts, setShowPreviousWorkouts] = useState(true);
+
+  const toHoursAndMinutes = (totalSeconds) => {
+    const totalMinutes = Math.floor(totalSeconds / 60);
+
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    return { h: hours, m: minutes };
+  }
 
   return (
     <main className="container mx-auto ">
@@ -24,6 +35,76 @@ export default function Home() {
               </div>
               <SignOutButton />
             </div>
+
+            <div className="flex flex-row my-10 items-center justify-center
+            gap-8"
+            >
+              <div className="bg-indigo-500 shadow text-center px-8 py-4 
+              rounded-3xl text-white w-1/6"
+              >
+                <FontAwesomeIcon icon={faWeightScale} className="text-3xl" />
+                <h2 className="font-semibold mt-2">Weight</h2>
+                <p>{bodyMeasurements.weight} lbs</p>
+              </div>
+              <div className="bg-indigo-500 shadow text-center px-8 py-4 
+              rounded-3xl text-white w-1/6"
+              >
+                <FontAwesomeIcon icon={faRuler} className="text-3xl" />
+                <h2 className="font-semibold mt-2">Height</h2>
+                <p>{bodyMeasurements.height.feet} ft {bodyMeasurements.height.inches} in</p>
+              </div>
+              <div className="bg-indigo-500 shadow text-center px-8 py-4 
+              rounded-3xl text-white w-1/6"
+              >
+                <FontAwesomeIcon icon={faChild} className="text-3xl" />
+                <h2 className="font-semibold mt-2">Body Fat</h2>
+                <p>{bodyMeasurements.bodyFat} %</p>
+              </div>
+            </div>
+
+            <div className="flex flex-row gap-4 items-center">
+              <h1 className="text-xl font-bold">Your Previous Workouts</h1>
+              <ChevronToggler showItems={setShowPreviousWorkouts} />
+            </div>
+
+            {showPreviousWorkouts ?
+              <div className="flex flex-row gap-2">
+                {workoutHistory.map(workout => {
+                  return (
+                    <div key={workout.dateCompleted}
+                      className="bg-slate-50 shadow px-4 py-2 rounded w-1/6"
+                    >
+                      <h2 className="font-semibold text-lg">{workout.title}</h2>
+                      <p>{new Date(workout.dateCompleted).toDateString()}</p>
+                      <div className="flex flex-row items-center gap-2">
+                        <FontAwesomeIcon icon={faClock} />
+                        <p>{Math.floor(workout.workoutDuration / 3600) !== 0 ?
+                          `${Math.floor(workout.workoutDuration / 3600)}h` : ""} {
+                            Math.floor(workout.workoutDuration / 60) !== 0 ?
+                              `${Math.floor(workout.workoutDuration / 60)}m` :
+                              `${workout.workoutDuration}s`}
+                        </p>
+                      </div>
+                      <h2 className="font-semibold">Exercise</h2>
+                      <ul className="pb-2">
+                        {workout.exercises.length ?
+                          workout.exercises.map(exercise => {
+                            return (
+                              <li key={exercise.exerciseId}>
+                                {exercise?.sets?.length ?
+                                  exercise?.sets?.length : 1} x {exercise.name}
+                              </li>
+                            );
+                          })
+                          :
+                          <p>None</p>
+                        }
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div> : <div></div>
+            }
           </div>
           :
           <UsernameForm /> :

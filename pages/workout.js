@@ -23,6 +23,7 @@ export default function WorkoutPage({ }) {
     addedExercisesInitialState);
   const [workoutTitle, setWorkoutTitle] = useState(workoutTitleInitialState);
   const router = useRouter();
+  const [workoutDuration, setWorkoutDuration] = useState(0);
 
   const handleCancelWorkout = () => {
     toast.error('Workout Canceled.');
@@ -86,7 +87,8 @@ export default function WorkoutPage({ }) {
         title: workoutTitle === "" ? "New Workout" : workoutTitle,
         exercises: addedExercises,
         templateId: uuid(),
-        dateCompleted: new Date().toISOString()
+        dateCompleted: new Date().toISOString(),
+        workoutDuration: workoutDuration
       })
     }).then(() => {
       console.log("Write to firestore. Added new workout session for user.");
@@ -117,7 +119,7 @@ export default function WorkoutPage({ }) {
           Finish Workout
         </button>
       </div>
-      <Timer />
+      <Timer update={setWorkoutDuration} />
 
       {addedExercises.length !== 0 ?
         addedExercises.map((currExercise) => {
@@ -175,11 +177,15 @@ export default function WorkoutPage({ }) {
   );
 }
 
-function Timer() {
+function Timer({ update }) {
   const [elapsedTime, setElapsedTime] = useState(0);
 
   const refreshTimer = () => {
-    setElapsedTime((elapsedTime) => elapsedTime + 1);
+    // update(elapsedTime);
+    setElapsedTime((elapsedTime) => {
+      update(elapsedTime);
+      return elapsedTime + 1
+    });
   };
 
   useEffect(() => {

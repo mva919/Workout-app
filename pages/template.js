@@ -6,8 +6,7 @@ import Link from "next/link";
 import { TemplateContext } from "../lib/TemplateContext";
 import { UserContext } from "../lib/UserContext";
 import { toast } from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import ChevronToggler from "../components/ChevronToggler";
 
 export default function TemplatePage({ }) {
   const { user, customTemplates } = useContext(UserContext);
@@ -22,7 +21,7 @@ export default function TemplatePage({ }) {
       template.templateId === templateId);
 
     setTemplate(defaultTemplate);
-    console.log(template.exercises);
+    console.log(template.defaultExercises);
     router.push("/workout");
   };
 
@@ -71,7 +70,7 @@ export default function TemplatePage({ }) {
             <h3 className="font-bold">
               My templates ({customTemplates.length})
             </h3>
-            <ChevronToggler setShowTemplates={setShowCustomTemplates} />
+            <ChevronToggler showItems={setShowCustomTemplates} />
           </div>
           <button
             className="bg-green-500 rounded-md px-4 py-1 
@@ -111,7 +110,7 @@ export default function TemplatePage({ }) {
           <h3 className="font-bold">
             Example templates ({defaultTemplates.length})
           </h3>
-          <ChevronToggler setShowTemplates={setShowDefaultTemplates} />
+          <ChevronToggler showItems={setShowDefaultTemplates} />
         </div>
         {showDefaultTemplates ?
           <div>
@@ -138,7 +137,9 @@ export default function TemplatePage({ }) {
 }
 
 function TemplatePreview({ template, startWorkout }) {
-  const exercises = useContext(ExercisesContext);
+  const defaultExercises = useContext(ExercisesContext);
+  const { customExercises } = useContext(UserContext);
+  const exercises = [...defaultExercises, ...customExercises];
   const PREVIEW_MAX = 6;
 
   return (
@@ -175,25 +176,6 @@ function TemplatePreview({ template, startWorkout }) {
       >
         Start Workout
       </button>
-    </div>
-  );
-}
-
-function ChevronToggler({ setShowTemplates }) {
-  const [toggled, setToggled] = useState(false);
-
-  const handleClick = () => {
-    setShowTemplates(toggled);
-    setToggled(!toggled);
-  };
-
-  return (
-    <div onClick={handleClick}>
-      {toggled ?
-        <FontAwesomeIcon icon={faChevronUp} className="h-4" />
-        :
-        <FontAwesomeIcon icon={faChevronDown} className="h-4" />
-      }
     </div>
   );
 }
