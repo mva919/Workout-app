@@ -1,4 +1,7 @@
-import { faChild, faClock, faRightFromBracket, faRuler, faWeightScale } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChild, faClock, faDumbbell, faRightFromBracket, faRuler,
+  faWeightScale
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
@@ -9,17 +12,9 @@ import { auth, firestore } from "../lib/firebase";
 import { UserContext } from "../lib/UserContext";
 
 export default function Home() {
-  const { user, username, bodyMeasurements, workoutHistory } = useContext(UserContext);
+  const { user, username, bodyMeasurements,
+    workoutHistory } = useContext(UserContext);
   const [showPreviousWorkouts, setShowPreviousWorkouts] = useState(true);
-
-  const toHoursAndMinutes = (totalSeconds) => {
-    const totalMinutes = Math.floor(totalSeconds / 60);
-
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    return { h: hours, m: minutes };
-  }
 
   return (
     <main className="container mx-auto ">
@@ -60,9 +55,16 @@ export default function Home() {
                 <h2 className="font-semibold mt-2">Body Fat</h2>
                 <p>{bodyMeasurements.bodyFat} %</p>
               </div>
+              <div className="bg-indigo-500 shadow text-center px-8 py-4 
+              rounded-3xl text-white w-1/6"
+              >
+                <FontAwesomeIcon icon={faDumbbell} className="text-3xl" />
+                <h2 className="font-semibold mt-2">Workouts</h2>
+                <p>{workoutHistory.length}</p>
+              </div>
             </div>
 
-            <div className="flex flex-row gap-4 items-center">
+            <div className="flex flex-row gap-4 items-center my-4">
               <h1 className="text-xl font-bold">Your Previous Workouts</h1>
               <ChevronToggler showItems={setShowPreviousWorkouts} />
             </div>

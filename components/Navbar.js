@@ -7,8 +7,8 @@ export default function Navbar({ }) {
 
   return (
     <nav className="mb-6">
-      <ul className="container mx-auto flex flex-row justify-center gap-8 py-4 
-      text-lg font-bold">
+      <ul className="container mx-auto flex flex-row justify-center gap-4 
+      sm:gap-24 py-4 text-lg font-bold">
         <Link href="/">
           <li className="hover:text-indigo-500 ease-in duration-100">
             Profile

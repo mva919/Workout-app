@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ExercisesContext } from "../lib/ExercisesContext";
 import { useDefaultTemplates } from "../lib/hooks";
 import { useRouter } from "next/router";
@@ -47,16 +47,15 @@ export default function TemplatePage({ }) {
   };
 
   return (
-    <main className="container mx-auto">
-      <h1 className="text-4xl font-bold mb-6">Start Workout</h1>
+    <main className="container mx-auto px-1 pb-16">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6">Start Workout</h1>
 
-      <div className="flex flex-col gap-1 mb-4">
+      <div className="flex flex-col gap-1 mb-4 w-full">
         <h2 className="font-bold text-xl">Quick Start</h2>
         <Link
           href="/workout"
-          className="bg-indigo-500 text-white py-2 rounded-md mx-1
-          font-semibold hover:bg-indigo-700 ease-in duration-100 w-full
-          text-center"
+          className="bg-indigo-500 text-white py-2 rounded-md font-semibold
+        hover:bg-indigo-700 ease-in duration-100 text-center"
         >
           Start an Empty Workout
         </Link>
@@ -65,8 +64,10 @@ export default function TemplatePage({ }) {
 
       <div>
         <h2 className="text-xl font-bold">Templates</h2>
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-row justify-start items-center gap-2">
+        <div className="flex flex-col-reverse sm:flex-row justify-between mt-4 
+        sm:mt-0">
+          <div className="flex flex-row justify-start items-center gap-2
+          mt-2 sm:mt-0">
             <h3 className="font-bold">
               My templates ({customTemplates.length})
             </h3>
@@ -89,7 +90,7 @@ export default function TemplatePage({ }) {
                 </h1>
                 :
                 <div className="my-4 flex flex-row gap-3 items-stretch
-                justify-start flex-wrap">
+                sm:justify-start justify-center flex-wrap">
                   {customTemplates.map(template => {
                     return (
                       <TemplatePreview
@@ -114,8 +115,8 @@ export default function TemplatePage({ }) {
         </div>
         {showDefaultTemplates ?
           <div>
-            <div className="my-4 flex flex-row gap-3 items-stretch justify-start
-            flex-wrap">
+            <div className="my-4 flex flex-row gap-3 items-stretch 
+            sm:justify-start justify-center flex-wrap">
               {defaultTemplates.map((defaultTemplate) => {
                 return (
                   <TemplatePreview

@@ -12,7 +12,7 @@ import { ExercisesContext } from "../lib/ExercisesContext";
 
 export default function WorkoutPage({ }) {
   const defaultExercises = useContext(ExercisesContext);
-  const { user, customExercises, workoutHistory } = useContext(UserContext);
+  const { user, customExercises } = useContext(UserContext);
   const { template, setTemplate } = useContext(TemplateContext);
   const addedExercisesInitialState = Object.keys(template).length !== 0 ?
     template.exercises : [];
@@ -25,6 +25,28 @@ export default function WorkoutPage({ }) {
   const router = useRouter();
   const [workoutDuration, setWorkoutDuration] = useState(0);
 
+  useEffect(() => {
+    // const localAddedExercises = window.localStorage.getItem('addedExercises');
+    // const localWorkoutTitle = window.localStorage.getItem('workoutTitle');
+    // if (localAddedExercises != null) {
+    //   console.log(JSON.parse(localAddedExercises));
+    //   setAddedExercises(JSON.parse(localAddedExercises));
+    // }
+    // if (localWorkoutTitle != null) {
+    //   console.log(localWorkoutTitle);
+    //   setWorkoutTitle(JSON.parse(window.localStorage.getItem('workoutTitle')));
+
+    // }
+    const localWorkoutTitle = window.localStorage.getItem("workoutTitle");
+    if (localWorkoutTitle !== null) {
+      setWorkoutTitle(localWorkoutTitle);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("workoutTitle", workoutTitle);
+  }, [workoutTitle]);
+
   const handleCancelWorkout = () => {
     toast.error('Workout Canceled.');
     setTemplate({});
@@ -36,14 +58,12 @@ export default function WorkoutPage({ }) {
   };
 
   const handleAddExerciseClick = (exercises) => {
-    console.log(customExercises, workoutHistory);
     const filteredExercises = exercises.map(exercise => {
       return { ...exercise.workout, exerciseId: uuid() }
     });
-    console.log(filteredExercises);
     setAddedExercises(prevExercises =>
       [...prevExercises, ...filteredExercises]);
-    console.log(addedExercises);
+    // window.localStorage.setItem("addedExercises", JSON.stringify(addedExercises));
     setShowExercises(false);
   };
 
@@ -60,6 +80,8 @@ export default function WorkoutPage({ }) {
   const handleTitleChange = (e) => {
     console.log(e.target.value);
     setWorkoutTitle(e.target.value);
+    // window.localStorage.setItem("workoutTitle", JSON.stringify(workoutTitle));
+
   };
 
   const handleExerciseChange = (sets, exerciseUid) => {
@@ -70,6 +92,7 @@ export default function WorkoutPage({ }) {
     selectedExercise.sets = sets;
     prevExercises[exerciseIndex] = selectedExercise;
     setAddedExercises(prevExercises);
+    window.localStorage.setItem("addedExercises", JSON.stringify(prevExercises));
   };
 
   const handleWorkoutFinish = () => {
@@ -181,7 +204,6 @@ function Timer({ update }) {
   const [elapsedTime, setElapsedTime] = useState(0);
 
   const refreshTimer = () => {
-    // update(elapsedTime);
     setElapsedTime((elapsedTime) => {
       update(elapsedTime);
       return elapsedTime + 1
@@ -189,7 +211,16 @@ function Timer({ update }) {
   };
 
   useEffect(() => {
+    window.localStorage.setItem("workoutElapsedTime", JSON.stringify(elapsedTime));
+  }, [elapsedTime]);
+
+  useEffect(() => {
     const timerId = setInterval(refreshTimer, 1000);
+
+    const localElapsedTime = JSON.parse(localStorage.getItem("workoutElapsedTime") || 0);
+    if (localElapsedTime !== null) {
+      setElapsedTime(localElapsedTime);
+    }
 
     return () => clearInterval(timerId);
   }, []);
