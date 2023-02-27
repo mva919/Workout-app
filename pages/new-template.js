@@ -99,20 +99,19 @@ export default function NewTemplatePage({ }) {
   };
 
   return (
-    <main className="container mx-auto">
-      <div className="flex flex-row justify-between items-center">
-        <h1 className="text-4xl font-bold my-2">
-          <input
-            type="text"
-            placeholder="New Workout"
-            onChange={handleTitleChange}
-            value={workoutTitle}
-            className="rounded hover:outline-indigo-500 hover:outline
-                ease-in duration-100"
-          />
-        </h1>
+    <main className="container mx-auto px-1">
+      <div className="flex flex-col items-start md:flex-row md:justify-between 
+      md:items-center mb-2 gap-x-4">
+        <input
+          type="text"
+          placeholder="New Workout"
+          onChange={handleTitleChange}
+          value={workoutTitle}
+          className="rounded hover:outline-indigo-500 hover:outline ease-in
+          duration-100 text-xl md:text-4xl font-bold my-2 w-full md:flex-1"
+        />
         <button
-          className="bg-green-500 rounded px-4 py-2 font-semibold
+          className="bg-green-500 rounded px-2 py-1 md:py-2 font-semibold
               shadow hover:bg-green-700 text-white ease-in 
               duration-200"
           onClick={handleSaveTemplate}

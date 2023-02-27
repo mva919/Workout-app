@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
     <UserContext.Provider value={userData}>
       <ExercisesContext.Provider value={exercises}>
         <TemplateContext.Provider value={templateValue}>
-          <Navbar />
+          {userData.username && <Navbar />}
           <Component {...pageProps} />
           <Toaster
             position="bottom-right"

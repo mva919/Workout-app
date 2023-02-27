@@ -121,18 +121,17 @@ export default function WorkoutPage({ }) {
   };
 
   return (
-    <main className="container mx-auto">
-      <div className="flex flex-row justify-between items-center">
-        <h1 className="text-4xl font-bold my-2">
-          <input
-            type="text"
-            placeholder="New Workout"
-            onChange={handleTitleChange}
-            value={workoutTitle}
-            className="rounded hover:outline-indigo-500 hover:outline
-            ease-in duration-100"
-          />
-        </h1>
+    <main className="container mx-auto px-1">
+      <div className="flex flex-col items-start md:flex-row md:justify-between 
+      md:items-center mb-2 gap-x-4">
+        <input
+          type="text"
+          placeholder="New Workout"
+          onChange={handleTitleChange}
+          value={workoutTitle}
+          className="rounded hover:outline-indigo-500 hover:outline ease-in
+          duration-100 text-xl md:text-4xl font-bold my-2 w-full md:flex-1"
+        />
         <button
           className="bg-green-400 rounded px-4 py-2 font-semibold
               shadow hover:bg-green-700 hover:text-white ease-in 
@@ -149,7 +148,7 @@ export default function WorkoutPage({ }) {
           return (
             <div
               key={currExercise.exerciseId}
-              className="bg-slate-200 shadow rounded px-4 py-1 my-2"
+              className="bg-slate-200 shadow rounded w-full py-1 my-2 px-1"
             >
               <ExerciseTracker
                 uid={currExercise.exerciseId}

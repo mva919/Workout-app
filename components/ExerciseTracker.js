@@ -77,7 +77,7 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
   };
 
   return (
-    <div className="my-2">
+    <div className="my-2 w-full">
       <div className="flex flex-row justify-between my-1">
         <h2 className="font-bold">{exercise.name}</h2>
         <button
@@ -110,11 +110,8 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
           return (
             <div
               key={set.setId}
-              className={
-                set.completed ?
-                  "bg-slate-50 px-2 py-1 items-center rounded flex flex-row justify-between my-1" :
-                  "px-2 py-1 items-center rounded flex flex-row justify-between my-1"
-              }
+              className={`px-2 py-1 items-center rounded flex flex-row gap-1
+                justify-between my-1 ${set.completed ? "bg-slate-50" : ""}`}
             >
               <SetButton
                 text={(index + 1).toString()}
@@ -127,7 +124,7 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
                 value={set.weight}
                 placeholder="0"
                 onChange={(e) => handleWeightChange(e, index)}
-                className="bg-slate-50 rounded text-center"
+                className="bg-slate-50 rounded text-center sm:w-48 w-24"
               />
 
               <input
@@ -135,7 +132,7 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
                 value={set.reps}
                 placeholder="0"
                 onChange={(e) => handleRepChange(e, index)}
-                className="bg-slate-50 rounded text-center"
+                className="bg-slate-50 rounded sm:w-48 w-24 text-center"
               />
 
 
@@ -152,10 +149,9 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
                   <button>
                     <FontAwesomeIcon
                       icon={faCheck}
-                      className={
-                        set.completed ?
-                          "bg-green-300 p-1 rounded" :
-                          "bg-slate-50 p-1 rounded hover:bg-green-300 ease-in duration-100"
+                      className={`p-1 rounded ease-in duration-100
+                      ${set.completed ? "bg-green-300" :
+                          "bg-slate-50 hover:bg-green-300"}`
                       }
                       onClick={(e) => handleCompletedChange(index)}
                     />

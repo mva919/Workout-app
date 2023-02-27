@@ -86,7 +86,8 @@ export default function ExercisesSearch({ handleAddClick, isPage,
             className="text-red-600 text-3xl hover:text-red-700"
             onClick={(e) => displayComponent(false)}
           />
-          <div className="flex flex-row items-center gap-6">
+          <div className="flex flex-col items-stretch sm:flex-row 
+          sm:items-center gap-1 md:gap-6">
             <button
               className="bg-indigo-500 text-white px-4 py-1 rounded
               enabled:hover:bg-indigo-700 ease-in duration-100
@@ -115,7 +116,8 @@ export default function ExercisesSearch({ handleAddClick, isPage,
 
       <form onSubmit={handleSubmit}>
         <div className="flex justify-center">
-          <div className="flex flex-col items-start justify-center w-1/2">
+          <div className="flex flex-col items-start justify-center w-11/12 
+          sm:w-3/4 xl:w-1/2">
             {isPage &&
               <button
                 className="bg-indigo-500 text-white px-4 py-1 rounded
@@ -128,7 +130,7 @@ export default function ExercisesSearch({ handleAddClick, isPage,
               </button>
             }
             <input
-              className={`my-4 rounded px-2 py-2 w-full 
+              className={`my-4 rounded px-2 py-2 w-full
             ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
               type="text"
               placeholder="Search"
@@ -140,7 +142,7 @@ export default function ExercisesSearch({ handleAddClick, isPage,
         </div>
       </form>
 
-      <div className="flex flex-row items-start justify-center gap-2">
+      <div className="flex flex-row items-start justify-center gap-x-2 gap-y-2 flex-wrap">
         <DropdownButton
           dropdownOptions={EXERCISE_CATEGORIES}
           buttonName="Any Category"
@@ -155,10 +157,9 @@ export default function ExercisesSearch({ handleAddClick, isPage,
         />
       </div>
 
-      <div className="absolute w-full bg-blue-100">
+      <div className="absolute w-full">
 
         {showCreateWorkout &&
-
           <div className="flex justify-center z-10 my-4">
             <WorkoutCreator
               isPage={isPage}
@@ -169,9 +170,10 @@ export default function ExercisesSearch({ handleAddClick, isPage,
         }
       </div>
 
-      <div className="h-full">
+      <div className="h-full mt-4">
         <ul
-          className={`flex flex-col items-start mx-auto w-1/2 shadow-sm rounded
+          className={`flex flex-col items-start mx-auto w-11/12 
+          sm:w-3/4 xl:w-1/2 shadow-sm rounded
           overflow-y-scroll h-2/3 ${isPage ? "bg-slate-200" : "bg-slate-50"}
           `}
         >
@@ -238,21 +240,22 @@ function DropdownButton({ dropdownOptions, buttonName,
   return (
     <div
       ref={ref}
-      className="flex flex-col items-start content-center my-2 relative"
+      className="flex flex-col items-center content-center relative"
     >
       <button
         onClick={handleToggle}
         className={`px-2 py-2 rounded focus:outline 
-        focus:outline-blue-700 w-64 ease-in duration-300
-        hover:bg-indigo-500 hover:text-white
+        focus:outline-blue-700 ease-in duration-300
+        hover:bg-indigo-500 hover:text-white w-36 md:w-48 lg:w-72
         ${isDark ? "bg-slate-200" : "bg-slate-50"}`}
       >
         {buttonText}
       </button>
       {toggle &&
         <div
-          className={`rounded list-none my-1 px-2 py-1 w-64 absolute top-full 
-          drop-shadow-xl ${isDark ? "bg-slate-200" : "bg-slate-50"}`}
+          className={`rounded list-none my-1 px-2 py-1 absolute top-full w-36 
+          md:w-48 lg:w-72 drop-shadow-xl 
+          ${isDark ? "bg-slate-200" : "bg-slate-50"}`}
         >
           {dropdownOptions.map((option, index) => {
             return (
@@ -319,8 +322,7 @@ function WorkoutCreator({ isPage, showComponent, refreshExercises }) {
 
 
   return (
-    <div className={`rounded shadow px-4 py-2 
-    ${isPage ? "bg-slate-200" : "bg-slate-50"}`}
+    <div className={`rounded shadow px-4 py-2 bg-red-200`}
     >
       <div className="flex flex-row justify-between py-4">
         <FontAwesomeIcon
