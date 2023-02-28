@@ -71,11 +71,11 @@ export default function Home() {
               <ChevronToggler showItems={setShowPreviousWorkouts} />
             </div>
 
-            {showPreviousWorkouts ?
+            {showPreviousWorkouts &&
               <div className="flex flex-col items-center justify-center 
               sm:flex-row sm:gap-4 sm:items-stretch md:justify-start flex-wrap
               gap-y-2">
-                {workoutHistory.map(workout => {
+                {workoutHistory.length ? workoutHistory.map(workout => {
                   return (
                     <div key={workout.dateCompleted}
                       className="bg-indigo-500 text-white shadow px-4 py-2 
@@ -110,14 +110,15 @@ export default function Home() {
                       </ul>
                     </div>
                   );
-                })}
-              </div> : <div></div>
+                }) : <h1 className="mx-auto mt-4">No previous workouts.</h1>
+                }
+              </div>
             }
           </div>
           :
           <UsernameForm /> :
         <div className="flex flex-col items-center bg-slate-100 rounded 
-        w-3/4 md:w-1/2 shadow h-64 mx-auto justify-between">
+        w-3/4 md:w-1/2 shadow h-64 mx-auto justify-between my-12">
           <div className="bg-indigo-500 w-full rounded-t flex items-center
           justify-center h-24">
             <h1 className="font-semibold text-4xl text-white">
@@ -199,8 +200,17 @@ function UsernameForm() {
       username: formValue,
       photoURL: user.photoURL,
       displayName: user.displayName,
+      bodyMeasurements: {
+        height: {
+          feet: userFeet,
+          inches: userInches
+        },
+        bodyFat: userBf,
+        weight: userWeight
+      },
       templates: [],
-      workoutSessions: []
+      customExercises: [],
+      previousWorkouts: []
     });
     batch.set(usernameDoc, { uid: user.uid });
 
@@ -231,8 +241,10 @@ function UsernameForm() {
     }
   };
 
+
   const checkIfNumber = (numberString) => {
-    if (typeof numberString != "string") return false // we only process strings!  
+    if (typeof numberString != "string")
+      return false;
     // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
     return !isNaN(numberString) &&
       !isNaN(parseFloat(numberString)) // ...and ensure strings of whitespace fail
@@ -294,8 +306,8 @@ function UsernameForm() {
 
   return (
     !username && (
-      <section className="flex flex-col text-center bg-slate-100 w-3/4 md:w-1/2 
-      mx-auto rounded shadow py-4">
+      <section className="flex flex-col text-center bg-slate-100 w-3/4 
+      md:w-1/2 mx-auto rounded shadow py-4">
         <h3 className="text-2xl sm:text-4xl font-semibold my-2">
           Create Username
         </h3>
@@ -363,7 +375,8 @@ function UsernameForm() {
           </div>
 
           <button
-            disabled={!isValid && userWeight === 0}
+            disabled={!isValid || !userWeight.length || !userFeet.length ||
+              !userInches.length || !userBf.length}
             className="bg-indigo-500 text-white py-2 mt-4 rounded shadow
             hover:bg-indigo-600 ease-in duration-100 w-36 lg:w-48
           disabled:bg-slate-300 disabled:text-slate-500"

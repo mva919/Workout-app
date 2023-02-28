@@ -5,6 +5,7 @@
     "exercises": [
       {
         "id": 10,
+        "name": "Lat Pulldown",
         "workoutId": 10,
         "sets": [
           {
@@ -23,6 +24,7 @@
       },
       {
         "id": 11,
+        "name": "T-Bar Row",
         "workoutId": 11,
         "sets": [
           {
@@ -41,6 +43,7 @@
       },
       {
         "id": 12,
+        "name": "Seated Row",
         "workoutId": 12,
         "sets": [
           {
@@ -59,6 +62,7 @@
       },
       {
         "id": 13,
+        "name": "Lat Pulldown (Single Arm)",
         "workoutId": 13,
         "sets": [
           {
@@ -77,6 +81,7 @@
       },
       {
         "id": 14,
+        "name": "Bicep Curl",
         "workoutId": 14,
         "sets": [
           {
@@ -95,6 +100,7 @@
       },
       {
         "id": 15,
+        "name": "Hammer Curl",
         "workoutId": 15,
         "sets": [
           {
@@ -119,6 +125,7 @@
     "exercises": [
       {
         "id": 2,
+        "name": "Dumbbell Bench Press",
         "workoutId": 2,
         "sets": [
           {
@@ -137,6 +144,7 @@
       },
       {
         "id": 16,
+        "name": "Seated Shoulder Press",
         "workoutId": 16,
         "sets": [
           {
@@ -155,6 +163,7 @@
       },
       {
         "id": 17,
+        "name": "Iso Incline Press",
         "workoutId": 17,
         "sets": [
           {
@@ -173,6 +182,7 @@
       },
       {
         "id": 18,
+        "name": "Chest Fly",
         "workoutId": 18,
         "sets": [
           {
@@ -190,25 +200,8 @@
         ]
       },
       {
-        "id": 19,
-        "workoutId": 19,
-        "sets": [
-          {
-            "weight": "",
-            "reps": "8"
-          },
-          {
-            "weight": "",
-            "reps": "8"
-          },
-          {
-            "weight": "",
-            "reps": "8"
-          }
-        ]
-      },
-      {
         "id": 20,
+        "name": "Lateral Raise (Cable)",
         "workoutId": 20,
         "sets": [
           {
@@ -227,6 +220,7 @@
       },
       {
         "id": 21,
+        "name": "Triceps Pushdown",
         "workoutId": 21,
         "sets": [
           {
@@ -251,6 +245,7 @@
     "exercises": [
       {
         "id": 7,
+        "name": "Hack Squat",
         "workoutId": 7,
         "sets": [
           {
@@ -269,6 +264,7 @@
       },
       {
         "id": 5,
+        "name": "Leg Extensions",
         "workoutId": 5,
         "sets": [
           {
@@ -287,6 +283,7 @@
       },
       {
         "id": 22,
+        "name": "Sissy Squats",
         "workoutId": 22,
         "sets": [
           {
@@ -305,6 +302,7 @@
       },
       {
         "id": 23,
+        "name": "Romanian Deadlift (Dumbbell)",
         "workoutId": 23,
         "sets": [
           {
@@ -323,6 +321,7 @@
       },
       {
         "id": 8,
+        "name": "Seated Leg Curl",
         "workoutId": 8,
         "sets": [
           {
@@ -341,6 +340,7 @@
       },
       {
         "id": 9,
+        "name": "Seated Calf Raise",
         "workoutId": 9,
         "sets": [
           {
