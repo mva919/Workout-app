@@ -69,7 +69,7 @@ export default function TemplatePage({ }) {
           <div className="flex flex-row justify-start items-center gap-2
           mt-2 sm:mt-0">
             <h3 className="font-bold">
-              My templates ({customTemplates.length})
+              My templates ({customTemplates?.length})
             </h3>
             <ChevronToggler showItems={setShowCustomTemplates} />
           </div>
@@ -84,14 +84,14 @@ export default function TemplatePage({ }) {
         {showCustomTemplates ?
           <div>
             {
-              customTemplates.length === 0 ?
+              customTemplates?.length === 0 ?
                 <h1 className="block text-center text-slate-500 my-2 text-lg">
                   No templates
                 </h1>
                 :
                 <div className="my-4 flex flex-row gap-3 items-stretch
                 sm:justify-start justify-center flex-wrap">
-                  {customTemplates.map(template => {
+                  {customTemplates?.map(template => {
                     return (
                       <TemplatePreview
                         key={template.templateId}
@@ -140,7 +140,8 @@ export default function TemplatePage({ }) {
 function TemplatePreview({ template, startWorkout }) {
   const defaultExercises = useContext(ExercisesContext);
   const { customExercises } = useContext(UserContext);
-  const exercises = [...defaultExercises, ...customExercises];
+  const exercises = customExercises ? [...defaultExercises, ...customExercises]
+    : [...defaultExercises];
   const PREVIEW_MAX = 6;
 
   return (

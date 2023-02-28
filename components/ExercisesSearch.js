@@ -14,8 +14,10 @@ export default function ExercisesSearch({ handleAddClick, isPage,
   displayComponent }) {
   const { user, customExercises } = useContext(UserContext);
   const exercises = useContext(ExercisesContext);
+  const userExercisesInitState = customExercises ?
+    [...exercises, ...customExercises] : [...exercises];
   const [userExercises, setUserExercises] =
-    useState([...exercises, ...customExercises]);
+    useState(userExercisesInitState);
   const [searchWorkout, setSearchWorkout] = useState("");
   const [bodyPart, setBodyPart] = useState("");
   const [category, setCategory] = useState("");
