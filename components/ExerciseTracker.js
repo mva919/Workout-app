@@ -76,6 +76,19 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
     console.log(setsArray);
   };
 
+  const handleWeightKeyPress = (event, index) => {
+    if (event.key === "Backspace" || event.key === "Delete") return;
+    if(event.key === "." && !sets[index].weight.includes(".")) return;
+    if(isNaN(Number(event.key)))
+      event.preventDefault();
+  };
+
+  const handleRepKeyPress = (event) => {
+    if (event.key === "Backspace" || event.key === "Delete") return;
+    if(isNaN(Number(event.key)))
+      event.preventDefault();
+  };
+
   return (
     <div className="my-2 w-full">
       <div className="flex flex-row justify-between my-1">
@@ -124,6 +137,7 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
                 value={set.weight}
                 placeholder="0"
                 onChange={(e) => handleWeightChange(e, index)}
+                onKeyDown={(e) => handleWeightKeyPress(e, index)}
                 className="bg-slate-50 rounded text-center sm:w-48 w-24"
               />
 
@@ -132,6 +146,7 @@ export default function ExerciseTracker({ uid, exerciseId, handleRemoveClick,
                 value={set.reps}
                 placeholder="0"
                 onChange={(e) => handleRepChange(e, index)}
+                onKeyDown={handleRepKeyPress}
                 className="bg-slate-50 rounded sm:w-48 w-24 text-center"
               />
 
