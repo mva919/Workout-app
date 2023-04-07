@@ -73,7 +73,7 @@ export default function ExercisesSearch({ handleAddClick, isPage,
     const resultsArray = userExercises.filter(workout => {
       return workout.muscle.includes(bodyFilter) &&
         workout.equipment.includes(categoryFilter)
-        && workout.name.includes(convertedStr);
+        && workout.name.toLowerCase().includes(convertedStr.toLowerCase());
     });
 
     return resultsArray;
