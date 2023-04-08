@@ -383,11 +383,6 @@ function UsernameForm() {
           >
             Choose
           </button>
-          <div>
-            <p>value : {formValue}</p>
-            <p>loading : {loading.toString()}</p>
-            <p>valid : {isValid.toString()}</p>
-          </div>
         </form>
       </section>
     )
